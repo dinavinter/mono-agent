@@ -1,0 +1,36 @@
+{
+  "jsc": {
+    "target": "esnext",
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true,
+      "dynamicImport": true,
+      "functionBind": false,
+      "exportDefaultFrom": true,
+      "exportNamespaceFrom": true,
+      "topLevelAwait": true,
+      "importMeta": true,
+      "preserveAllComments": true
+    },
+    "transform": {
+      "decoratorMetadata": true,
+      "legacyDecorator": true
+    },
+    "keepClassNames": true,
+    "externalHelpers": true,
+    "loose": true,
+    "keepClassNames": true
+  },
+  "module": {
+    "type": "commonjs"
+  },
+  "sourceMaps": true,
+  "exclude": [
+    "jest.config.ts",
+    ".*\\.spec.tsx?$",
+    ".*\\.test.tsx?$",
+    "./src/jest-setup.ts$",
+    "./**/jest-setup.ts$",
+    ".*.js$"
+  ]
+}

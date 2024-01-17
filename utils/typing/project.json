@@ -1,0 +1,37 @@
+{
+  "name": "typing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "utils/typing/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/utils/typing",
+        "main": "utils/typing/src/index.ts",
+        "tsConfig": "utils/typing/tsconfig.lib.json",
+        "assets": ["utils/typing/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "utils/typing/**/*.ts",
+          "utils/typing/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/utils/typing"
+      }
+    }
+  },
+  "tags": []
+}

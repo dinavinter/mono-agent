@@ -1,0 +1,10 @@
+packages:
+  - "apps/*"
+  - "agents/*" 
+  - "sandbox/*" 
+  - "tools/*"
+  - "pipes/*"
+#  - "storage/*"
+#  - "services/*"
+#  - "components/*"
+ 

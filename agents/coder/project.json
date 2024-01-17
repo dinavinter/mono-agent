@@ -1,0 +1,37 @@
+{
+  "name": "coder",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "agents/coder/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/agents/coder",
+        "main": "agents/coder/src/index.ts",
+        "tsConfig": "agents/coder/tsconfig.lib.json",
+        "assets": ["agents/coder/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "agents/coder/**/*.ts",
+          "agents/coder/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/agents/coder"
+      }
+    }
+  },
+  "tags": []
+}

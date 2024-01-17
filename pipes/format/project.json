@@ -1,0 +1,37 @@
+{
+  "name": "format",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "pipes/format/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/pipes/format",
+        "main": "pipes/format/src/index.ts",
+        "tsConfig": "pipes/format/tsconfig.lib.json",
+        "assets": ["pipes/format/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "pipes/format/**/*.ts",
+          "pipes/format/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/pipes/format"
+      }
+    }
+  },
+  "tags": []
+}

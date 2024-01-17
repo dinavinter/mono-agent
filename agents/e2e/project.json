@@ -1,0 +1,41 @@
+{
+  "name": "e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "agents/e2e/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/agents/e2e",
+        "tsConfig": "agents/e2e/tsconfig.lib.json",
+        "packageJson": "agents/e2e/package.json",
+        "main": "agents/e2e/src/index.ts",
+        "assets": ["agents/e2e/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs e2e {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {}
+    },
+    "test-v": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/agents/tester"
+      }
+    }
+  },
+  "tags": []
+}

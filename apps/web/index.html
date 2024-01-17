@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <flowise-fullchatbot></flowise-fullchatbot>
+    <script type="module">
+      import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+      Chatbot.initFull({
+        chatflowid: "005ff5a5-6db4-48c9-be8b-344890ab8d19",
+        apiHost: "https://flowiseai-flowise.hf.space",
+      })
+    </script>
+
+    <gigya-js api-key="%GIGYA_API_KEY%" domain="%GIGYA_DOMAIN%">
+      <div slot="loading" ></div>
+      <div slot="ready" ></div>
+      <span slot="error" >An error occurred while loading the Gigya script.</span>
+
+      <template id="ready">
+        <script type="application/javascript" name="script">
+          gigya.accounts.showScreenSet({
+            screenSet: "Default-RegistrationLogin",
+            startScreen: "gigya-register-screen",
+            apiKey: "%GIGYA_API_KEY%"});
+        </script>
+
+      </template>
+    </gigya-js>
+    <compiler-element></compiler-element>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

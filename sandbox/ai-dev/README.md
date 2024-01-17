@@ -1,0 +1,11 @@
+# E2B Sandbox
+
+This library was generated with [Nx](https://nx.dev).
+
+## Building
+
+Run `nx build sendbox` to build the library.
+
+## Running unit tests
+
+Run `nx test sendbox` to execute the unit tests via [Jest](https://jestjs.io).

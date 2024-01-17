@@ -1,0 +1,37 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "es2022",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "noPropertyAccessFromIndexSignature": false,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@eslint.config": [".eslint.config.js"],
+      "e2e": ["agents/e2e/src/index.ts"],
+       "@nodes": ["@mono-agent/types"],
+      "@sdk/js": ["agents/sdks/js/src/index.ts"],
+      "coder": ["agents/coder/src/index.ts"],
+      "format": ["pipes/format/src/index.ts"],
+      "oidc": ["agents/oidc/src/index.ts"],
+      "prompt-template": ["libs/prompt-template/src/index.ts"],
+      "sendbox": ["libs/sendbox/src/index.ts"],
+      "split": ["pipes/split/src/index.ts"],
+      "task-analyze": ["agents/task-analyze/src/index.ts"],
+      "types": ["tools/types/src/index.ts"],
+      "typing": ["utils/typing/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

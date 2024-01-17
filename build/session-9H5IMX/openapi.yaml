@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  title: Playwright Test Management API
+  version: 1.0.0
+  description: This API allows for managing and executing Playwright tests.
+
+servers:
+  - url: 'http://localhost:3000'
+    description: Local server
+
+paths:
+  /tests:
+    post:
+      summary: Create a new test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Test'
+      responses:
+        '201':
+          description: Test created
+  /tests/{testId}:
+    parameters:
+      - name: testId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a specific test
+      responses:
+        '200':
+          description: Details of a test
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+
+    put:
+      summary: Update an existing test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Test'
+      responses:
+        '200':
+          description: Test updated
+
+    delete:
+      summary: Delete a test
+      responses:
+        '204':
+          description: Test deleted
+
+  /tests/{testId}/execute:
+    parameters:
+      - name: testId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Execute a specific test
+      responses:
+        '202':
+          description: Test execution started
+
+  /tests/{testId}/history:
+    parameters:
+      - name: testId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get the history of a specific test
+      responses:
+        '200':
+          description: History of the specified test
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestResult'
+
+  /tests/{testId}/runs:
+    parameters:
+      - name: testId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get the runs of a specific test
+      responses:
+        '200':
+          description: Runs of the specified test
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestRun'
+  /runs:
+    get:
+      summary: Get all runs
+      responses:
+        '200':
+          description: All runs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestRun'
+  /runs/{runId}/status:
+    parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get the status of a specific run
+      responses:
+        '200':
+          description: Status of the specified run
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunStatus'
+
+  /runs/{runId}/cancel:
+    parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Cancel a specific run
+      responses:
+        '200':
+          description: Run cancelled
+
+components:
+  schemas:
+    Test:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        script:
+          type: string
+
+    TestResult:
+      type: object
+      properties:
+        testId:
+          type: string
+        executionId:
+          type: string
+        status:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+        result:
+          type: string
+
+    TestRun:
+      type: object
+      properties:
+        runId:
+          type: string
+        testId:
+          type: string
+        status:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string
+
+    RunStatus:
+      type: object
+      properties:
+        runId:
+          type: string
+        status:
+          type: string
+        startTime:
+          type: string
+        endTime:
+          type: string

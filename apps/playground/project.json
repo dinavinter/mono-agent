@@ -1,0 +1,23 @@
+{
+  "name": "playground",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/playground/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/playground/**/*.{ts,svelte,spec.ts}"]
+      }
+    },
+    "check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "svelte-check",
+        "cwd": "apps/playground"
+      }
+    }
+  }
+}
