@@ -5,6 +5,8 @@ import {DynamicTool, ReadFileTool, WriteFileTool} from 'langchain/tools';
 import {AutoGPT} from 'langchain/experimental/autogpt';
 import {BetterAutoGPTOutputParser} from './BetterAutoGPTOutputParser.js';
 import {findInPage, goToLink, interactWithPage} from '../actions/index.js';
+import {appendToTestFile} from '../util/index.js';
+import {execPlayWrightCode, getPlayWrightCode} from '../actions/interactWithPage.js';
 
 export async function doActionWithAutoGPT(page, chatApi, task, options) {
   const store = new NodeFileStore();
@@ -22,7 +24,12 @@ export async function doActionWithAutoGPT(page, chatApi, task, options) {
         'perform an action on the current page. Returns success after the interaction is successful or an error message if the interaction failed. the task should be written as a directive what the browser should do.',
       func: async (task) => {
         try {
-          await interactWithPage(chatApi, page, task, options);
+       
+          const code = await getPlayWrightCode(chatApi, page, task);
+          if (options.outputFilePath) {
+            appendToTestFile(task, code, options.outputFilePath);
+          }
+          const re= await execPlayWrightCode(page, code);
           return 'Success';
         } catch (e) {
           console.log(e);
@@ -64,6 +71,7 @@ export async function doActionWithAutoGPT(page, chatApi, task, options) {
     aiName: 'Developer Digest Assistant',
     aiRole: 'Assistant',
     humanInTheLoop: false,
+    
     outputParser: new BetterAutoGPTOutputParser(),
     //maxIterations: 4,
   });
@@ -73,4 +81,6 @@ export async function doActionWithAutoGPT(page, chatApi, task, options) {
   } catch (e) {
     console.log(e);
   }
+  
+  await vectorStore.save(`${store.basePath}/vector/.hnsw`);
 }

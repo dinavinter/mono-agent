@@ -6,9 +6,9 @@ import colors from '@colors/colors';
 import {Command} from 'commander';
 
 import {ChatOpenAI} from 'langchain/chat_models/openai';
-import {doActionWithAutoGPT} from './autogpt/index.js';
-import {interactWithPage} from './actions/index.js';
-import {createTestFile, gracefulExit} from './util/index.js';
+import {doActionWithAutoGPT} from '~/autogpt';
+import {interactWithPage} from '~/actions';
+import {createTestFile, gracefulExit} from '~/util';
 
 dotenv.config();
 
@@ -40,7 +40,7 @@ async function main(options) {
   });
 
   if (options.outputFilePath) {
-    createTestFile(options.outputFilePath);
+    createTestFile(options);
   }
 
   process.on('exit', () => {
@@ -78,7 +78,7 @@ async function main(options) {
 const program = new Command();
 
 program
-  .option('-a, --autogpt', 'run with autogpt', false)
+  .option('-a, --autogpt', 'run with autogpt', true)
   .option('-m, --model <model>', 'openai model to use', 'gpt-4-1106-preview')
   .option('-o, --outputFilePath <outputFilePath>', 'path to store test code')
   .option('-u, --url <url>', 'url to start on', 'https://www.google.com')

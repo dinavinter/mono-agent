@@ -1,6 +1,6 @@
 import './style.css'
 import '@gigya/wc'
-import './compiler-element.ts'
+import '~/compiler-element.ts'
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>  
      <my-element>

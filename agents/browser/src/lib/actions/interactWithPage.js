@@ -5,13 +5,12 @@ import {
   parseSite,
   preprocessJsonInput,
   appendToTestFile,
-} from '../util/index.js';
+} from '~/util';
 
 const AsyncFunction = async function () {}.constructor;
 
 export async function interactWithPage(chatApi, page, task, options) {
   const code = await getPlayWrightCode(page, chatApi, task);
-
   if (options.outputFilePath) {
     appendToTestFile(task, code, options.outputFilePath);
   }
@@ -35,7 +34,8 @@ async function queryGPT(chatApi, messages) {
   return cleanedCommands;
 }
 
-async function getPlayWrightCode(page, chatApi, task) {
+
+export async function getPlayWrightCode(page, chatApi, task) {
   const systemPrompt = `
 You are a Senior SDET tasked with writing Playwright code for testing purposes. Your role involves implementing specific task-based code segments within a larger test file, following the instructions provided closely. Assume that common imports like 'test' and 'expect' from '@playwright/test' are already at the top of the file.
 
@@ -70,7 +70,7 @@ The objective is to create Playwright code that is efficient, precise, and perfe
   ]);
 }
 
-async function execPlayWrightCode(page, code) {
+export async function execPlayWrightCode(page, code) {
   const dependencies = [
     {param: 'page', value: page},
     {param: 'expect', value: expect},

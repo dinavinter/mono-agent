@@ -1,0 +1,27 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "strictNullChecks": true,
+ 
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "paths": {
+      "~/*": ["./src/lib/*"],
+      "@/*": ["./src/*"],
+
+    },
+    "allowJs": true,
+    "skipLibCheck": true
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
