@@ -1,18 +1,17 @@
 import {Form, Link, NavLink, Outlet} from '@remix-run/react';
 import {ActionFunctionArgs, LoaderFunctionArgs, redirect} from '@remix-run/node';
-import {PageMachineActor, type WebChatServiceSnapshot} from '@mono-agent/browser';
+import {PageMachineActor, type WebChatServiceSnapshot} from '@mono-agent/tester';
 import {webService} from '~/services/system.ts';
 import {eventStream} from 'remix-utils/sse/server';
-import {useEffect, useRef, useState} from 'react';
-import {useEventSource} from 'remix-utils/sse/react';
-import { AutoGPTTester } from '@mono-agent/e2e';
+import {useRef} from 'react';
+import {useEventSourceJson} from '~/services/eventSource.ts';
 
 export async function loader({
                                request,
                              }: LoaderFunctionArgs) { 
    return eventStream(request.signal, function setup(send) {
-    const subscription= webService.subscribe(function({context:{pages}, event: {}}: WebChatServiceSnapshot) {
-       send({ data: JSON.stringify(pages.map((page: PageMachineActor) => {
+    const subscription= webService.subscribe(function({context:{pages}}: WebChatServiceSnapshot) {
+       send({ data: JSON.stringify(pages.items.map((page: PageMachineActor) => {
             return page.id;
          })) });
      })  
@@ -28,27 +27,16 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const url = formData.get("url") as string;
   webService.send({type: "page", url});
- const c= AutoGPTTester()
-  return redirect(`${url}`)
+  return redirect(`/chat/${url}`)
 
 }
 
  
 
-export function Pages() {
-  const [pages, setPages] = useState<string[]>([]);
-  const lastPage = useEventSource(`/`, {});
+export default function Pages() {
   const $form = useRef<HTMLFormElement>(null);
-
-  useEffect(
-    function saveMessage() {
-      setPages((current) => {
-        if (typeof lastPage === "string") return current.concat(lastPage);
-        return current;
-      });
-    },
-    [lastPage],
-  );
+  const pages =useEventSourceJson<string[]>(`/`) 
+  
 
   return (<>
     <div id="sidebar">

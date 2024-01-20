@@ -11,16 +11,16 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@mono-agent/browser": "workspace:*",
-    "@mono-agent/e2e": "workspace:*",
-     "@remix-run/node": "^2.5.0",
+    "@mono-agent/tester": "workspace:*",
+    "@remix-run/node": "^2.5.0",
     "@remix-run/react": "^2.5.0",
     "@remix-run/serve": "^2.5.0",
     "ai": "^2.2.31",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remix-utils": "^7.5.0"
+    "remix-utils": "^7.5.0",
+    "xstate": "^5.5.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.5.0",
@@ -40,6 +40,7 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.1.6",
     "vite": "^5.0.0",
+    "vite-plugin-cjs-interop": "^2.0.2",
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {

@@ -1,18 +1,16 @@
-import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
+import {ActionFunctionArgs} from '@remix-run/node';
 import { eventStream } from "remix-utils/sse/server";
 
-import {useParams, useSearchParams} from '@remix-run/react';
+import {useParams} from '@remix-run/react';
 import {webService} from '~/services/system.ts';
-import {TaskMachineEvent, TaskServiceSnapshot} from '@mono-agent/browser';
-import { useEventSource } from 'remix-utils/sse/react';
+import {TaskMachineEvent, TaskServiceSnapshot} from '@mono-agent/tester';
 import {useEventSourceBatchJson} from '~/services/eventSource.ts';
-import type {Message} from 'ai/react';
 
 export async function loader({request}: ActionFunctionArgs) {
   const {task} = useParams();
   return eventStream(request.signal, function setup(send) {
-    const subscription= webService.system.get(task).subscribe(function({context, event, state}: TaskServiceSnapshot) {
-       send({ data: JSON.stringify({context, event, state:state.value}) } ) ;
+    const subscription= webService.system.get(task!).subscribe(function(snapshot: TaskServiceSnapshot) {
+       send({ data: JSON.stringify( snapshot)});
     })
 
     return function cleanup() {

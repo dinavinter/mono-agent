@@ -1,18 +1,16 @@
 import {emitter} from '~/services/emitter.ts';
-import {ActionFunctionArgs, redirect} from '@remix-run/node';
-import {
-  createWebChatService,
-  SomeMachine,
-  WebChatService,
-  createActor,
+ import {
+   WebChatMachine,
+} from '@mono-agent/tester';
+
+import type{
+  AnyStateMachine,
   AnyActor,
-  type WebChatServiceSnapshot,
   SnapshotFrom,
-  WebChatMachine,
-} from '@mono-agent/browser';
+} from 'xstate';
+ import {createActor} from 'xstate';
 
-
- export function hydrateWithLocalStorage(machine: SomeMachine) {
+ export function hydrateWithLocalStorage(machine: AnyStateMachine) {
    // Get the state from localStorage (if it exists)
    const stateString = localStorage.getItem(machine.id);
 

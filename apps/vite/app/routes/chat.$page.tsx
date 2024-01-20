@@ -1,43 +1,69 @@
-import {ActionFunctionArgs, redirect} from '@remix-run/node';
+import {ActionFunctionArgs} from '@remix-run/node';
 import {
+  PageMachineActor,
   PageServiceSnapshot, TaskMachineActor,
-} from '@mono-agent/browser';
-import {useLocation, Form, useParams, Outlet, Link, NavLink} from '@remix-run/react';
+} from '@mono-agent/tester';
+import {useLocation, Form, useParams, Outlet, NavLink, json} from '@remix-run/react';
 import { useEffect, useRef } from "react";
 import {webService} from '~/services/system.ts';
 import { eventStream } from 'remix-utils/sse/server';
 import {useEventSourceBatch} from '~/services/eventSource.ts';
   
  export async function action({ request }: ActionFunctionArgs) {
+   const {page} = useParams();
+   const service = webService.system.get(page!) as PageMachineActor;
    const formData = await request.formData();
-
-   const url = formData.get("url") as string;
-   webService.send({type: "page", url});
-  
-   return redirect(`/chat/${url}`, {
-     headers: {
-       "Set-Cookie": `systemId=${url}; Path=/; HttpOnly`
-     }
-
-
+   const task = formData.get("task") as string;
+   service.send({type: "task", task});
+    
+   
+   let promise = new Promise<{task: TaskMachineActor, id:string, href:string}>((resolve) => {
+   service.subscribe(
+      function({context:{currentTask} }: PageServiceSnapshot) {
+        if(currentTask) {
+               resolve({
+                 task: currentTask,
+                 id: currentTask.id,
+                 href: `/${page}/${currentTask.id}`,
+               });
+      
+        }
+      }
+   )}
+   );
+    const {task:taskActor, href, id} = await promise;
+   return json({ 
+     message: "task created",
+     id, href,
+     data: taskActor.getPersistedSnapshot(),
+     links:{
+      self: `/${page}`,
+      task: href
+     } }, {
+      headers: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/json",
+        "Location": href,
+        "X-Remix-Run-Location": href,
+        "X-System-Id": id,
+      },
    });
  }
  
  
  export async function loader({request}: ActionFunctionArgs) {
-   const {page} = useParams(); 
-     return eventStream(request.signal, function setup(send) {
-     const subscription= webService.system.get(page).subscribe(function({context:{tasks}, event: {}}: PageServiceSnapshot) {
-       send({ data: JSON.stringify(tasks.map((task: TaskMachineActor) => {
-           return task.id;
-         })) });
+   const {page} = useParams();
+   return eventStream(request.signal, function setup(send) {
+     const subscription = webService.system.get(page!).subscribe(function({context: {currentTask}}: PageServiceSnapshot) {
+       if (currentTask)
+         send({data: currentTask.id});
      })
 
      return function cleanup() {
        subscription.unsubscribe();
      };
    })
-   }
+ }
  
 
    export default function Component() {
