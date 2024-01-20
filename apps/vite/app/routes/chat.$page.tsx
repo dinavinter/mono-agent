@@ -5,11 +5,12 @@ import type {
 } from '@mono-agent/tester';
 import {useLocation, Form, useParams, Outlet, NavLink, json} from '@remix-run/react';
 import { useEffect, useRef } from "react";
-import {webService} from '~/services/system.server';
 import { eventStream } from 'remix-utils/sse/server';
 import {useEventSourceBatch} from '~/services/eventSource.ts';
   
  export async function action({ request }: ActionFunctionArgs) {
+   const   {webService} = await import('~/services/system.server');
+
    const {page} = useParams();
    const service = webService.system.get(page!) as PageMachineActor;
    const formData = await request.formData();
@@ -52,6 +53,8 @@ import {useEventSourceBatch} from '~/services/eventSource.ts';
  
  
  export async function loader({request}: ActionFunctionArgs) {
+   const   {webService} = await import('~/services/system.server');
+
    const {page} = useParams();
    return eventStream(request.signal, function setup(send) {
      const subscription = webService.system.get(page!).subscribe(function({context: {currentTask}}: PageServiceSnapshot) {

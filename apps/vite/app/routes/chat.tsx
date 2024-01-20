@@ -18,7 +18,7 @@ export async function loader({
   return eventStream(request.signal, function setup(send) {
 
      const subscription= webService.subscribe(function({context:{pages}}: WebChatServiceSnapshot) {
-       send({ data: JSON.stringify(pages.items.map((page: PageMachineActor) => {
+       send({ data: JSON.stringify(pages.map((page: PageMachineActor) => {
             return page.id;
          })) });
      })  
