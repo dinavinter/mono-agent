@@ -30,54 +30,7 @@ export type BaseInput = {
 
 
 }
-
-export type ItemWithId<TItem, TIdField extends string = "id", TIdType = number>=  TItem &    {
-   [P in TIdField]: TIdType;
-}
-
-export function entitySet <TItem, TIdField extends string = "id", TIdType = number>(field:TIdField ="id" as TIdField ){
-  const items= [] as ItemWithId<TItem, TIdField, TIdType> & any[];
-   
-  const set ={
-    items: items,
-    push(item: ItemWithId<TItem, TIdField, TIdType>) {
-      this.items.push(item);
-      return this;
-    },
-    add(item: TItem){
-      const id = this.autoIncrementId.next();
-      return this.push({...item, [field]: id})  
-    },
-    
-    removeAt(id: TIdType){
-      this.items = this.items.filter((i: TItem & { [P in TIdField]: TIdType }) => i[field] !== id);
-      return this;
-
-    },
-     get first() {
-      return items[0];
-    },
-    get last() {
-      return items.length && items[this.items.length - 1];
-    },
-    autoIncrementId: {
-      _id: 0,
-      next() {
-        return this._id++;
-      }
-      
-
-    }
-
-  }
-  set.push.bind(set);
-  set.autoIncrementId.next.bind(set.autoIncrementId);
-
-  return set;
-}
-
-export type EntitySet<TItem> = ReturnType<typeof entitySet<TItem>>;
-
+ 
 type ContextFactoryBase= <TContext extends BaseContext, TActor extends ProvidedActor, TInput extends BaseInput & Partial<TContext>, TEvent extends EventObject = EventObject>  ({ spawn, input, self }: {
   spawn: Spawner<TActor>;
   input: TInput;

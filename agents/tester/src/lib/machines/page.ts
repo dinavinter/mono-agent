@@ -1,6 +1,6 @@
 import {
   ActorRefFrom,
-  AnyActor, AnyActorRef,
+  AnyActor, AnyActorRef, AnyEventObject,
   assign,
   ContextFrom, DoneActorEvent, enqueueActions, ErrorActorEvent,
   EventFrom,
@@ -10,8 +10,8 @@ import {
   StateFrom,
 } from 'xstate';
 import { taskMachine, TaskMachineActor, TaskMachineMachineOutput} from './task';
-import {Page, BrowserContext} from 'playwright';
-import {BaseContext, BaseInput, contextFactoryWith, entitySet, EntitySet} from './common';
+import type {Page, BrowserContext} from 'playwright';
+import {BaseContext, BaseInput, contextFactoryWith} from './common';
 
 export type Message = {
   role: 'human' | 'bot',
@@ -33,16 +33,18 @@ export const pageMachineSetup = setup({
       browser: BrowserContext
     } & BaseInput,
     context: {} as {
-      tasks: EntitySet<TaskMachineActor>,
+      tasks: TaskMachineActor[],
       currentTask?: TaskMachineActor,
-      completedTasks: EntitySet<TaskMachineMachineOutput>,
+      completedTasks: TaskMachineActor[],
       page: Page,
-      messages: EntitySet<Message>,
+      messages: Message[],
       url: string,
       sender?: AnyActor,
       browser: BrowserContext
     } & BaseContext,
-    events: {} as TaskEvent | {
+    events: {} as 
+      | AnyEventObject
+      | TaskEvent | {
       type: 'task.done',
       output: any
     } | {
@@ -51,9 +53,9 @@ export const pageMachineSetup = setup({
     } |DoneActorEvent<Page> | ErrorActorEvent
   },
   actions: {
-    assignPage: assign({
-      page: ({event:{output}}:{event:DoneActorEvent<Page>}) => output
-    }),
+    assignPage: assign(({event:{output}}:AnyEventObject) => ({
+      page:({event:{output}}:{event:DoneActorEvent<Page>}) =>    output
+    })),
     onTaskCreated: ()=>{},
     // enqueueNewTask: enqueueActions(function({ context: {tasks, messages, page, chatApi, outputFilePath, ...options},  event, enqueue, system })  {
     //   const systemId=`tasks-${tasks.autoIncrementId.next()}`
@@ -86,8 +88,9 @@ export const pageMachineSetup = setup({
     // }),
     assignNewTask: assign({
       currentTask: ({context: {tasks, page, chatApi, outputFilePath}, event,   spawn, self}) =>
-        ({...spawn('taskMachine', {
-          systemId: `${tasks.autoIncrementId.next()}`,
+        spawn('taskMachine', {
+          id: `task:${tasks.length+1}`,
+          systemId: `task:${tasks.length+1}`,
           input: {
             page: page,
             task: (event as TaskEvent).task,
@@ -95,11 +98,11 @@ export const pageMachineSetup = setup({
             outputFilePath,
             sender: self,
           },
-        }), id: `${tasks.autoIncrementId._id}`}),
+        }),
 
     }),
     assignCompletedTask: assign({
-      tasks: ({context: {tasks, currentTask}}) => currentTask? tasks.add(currentTask) : tasks,
+      tasks: ({context: {tasks, currentTask}}) => currentTask? tasks.concat(currentTask) : tasks,
       // completedTasks: ({context: {completedTasks,currentTask}, _} ) => completedTasks.push(currentTask),
     }),
 
@@ -123,8 +126,8 @@ export const pageMachineSetup = setup({
 });
 export const pageMachine = pageMachineSetup.createMachine({
   context: contextFactoryWith({
-    tasks: entitySet<ActorRefFrom<typeof taskMachine>>(),
-    messages: entitySet<Message>()
+    tasks: [],
+    messages: []
   }),
   initial: 'loading',
   states: {

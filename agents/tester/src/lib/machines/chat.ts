@@ -8,8 +8,8 @@ import {
 } from 'xstate';
 import {doActionWithAutoGPT} from '../autogpt';
 import {createTestFileAsync} from '../util';
-import {chromium, Page, BrowserContext} from 'playwright';
-import {BaseContext, contextFactoryWith, EntitySet} from './common';
+import  {chromium, type Page, type BrowserContext} from 'playwright';
+import {BaseContext, contextFactoryWith} from './common';
 import {Message, pageMachine, PageMachineActor} from './page';
  
 
@@ -66,12 +66,12 @@ const  webChatMachineSetup =  setup({
   actions: {
     assignBotMessage: assign({
       messages: ({context: {messages}, event}) => {
-        return messages.add({role: 'bot', content: event});
+        return messages.concat({role: 'bot', content: event});
       }
     }),
     assignHumanMessage: assign({
       messages: ({context: {messages}, event}) => {
-        return messages.add({role: 'human', content: event});
+        return messages.concat({role: 'human', content: event});
       }
     }),
     sendTask: sendTo('page-gpt', ({event: {task}}: {event: {task: string}}) => ({
@@ -85,38 +85,38 @@ const  webChatMachineSetup =  setup({
 
     assignError: assign({
       errors: ({context: {errors}, event}) => {
-        return errors.add(event);
+        return errors.concat(event as ErrorActorEvent);
       }
     }),
     assignBrowser: assign({
-      browser: ({event: {output}}: {event: DoneActorEvent<BrowserContext>}) => output
+      browser: ({event: {output}}: {event: AnyEventObject}) => output
     }),
+    
     assignPageMachine: assign({
-      pages: ({context: {pages, chatApi, browser, outputFilePath}, event, spawn}) => pages.add(
-        {...
+      pages: ({context: {pages, chatApi, browser, outputFilePath}, event, spawn}) => pages.concat(
         spawn('pageGPT', {
-          systemId: `${pages.autoIncrementId.next()}`,
-          input: {
-            url: event.type === "page" && event.url || 'https://www.google.com',
-            chatApi: chatApi,
-            browser: browser!,
-            outputFilePath
-          },
-          syncSnapshot: true,
-        }
-      ), id: `${pages.autoIncrementId._id}`} ),
-    }),
-  
-     logSnapshot: ({event}) => console.log(event),
+            id: 'page-gpt',
+            systemId: `pages-${pages.length +1}`,
+            input: {
+              url: event.type === "page" && event.url || 'https://www.google.com',
+              chatApi: chatApi,
+              browser: browser!,
+              outputFilePath
+            },
+            syncSnapshot: true,
+          }))
+        }),
+
+      logSnapshot: ({event}) => console.log(event),
   },
   types: {
     context: {} as {
       browser: BrowserContext | undefined,
       viewport: string | undefined,
       outputFilePath: string,
-      messages: EntitySet<Message>
-      errors: EntitySet<any>,
-      pages: EntitySet<PageMachineActor >,
+      messages: Message[]
+      errors: ErrorActorEvent[],
+      pages: PageMachineActor[],
     }& BaseContext,
     events: {} as
       | AnyEventObject
@@ -195,7 +195,7 @@ const webChatMachine = webChatMachineSetup
         }
       } 
     }
-  }) as ReturnType<(typeof webChatMachineSetup)["createMachine"]>;
+  }) ;
 
 export type WebChatMachineType =  typeof webChatMachine;
 export  const WebChatMachine:WebChatMachineType = webChatMachine
@@ -217,6 +217,4 @@ export type WebChatServiceSnapshot = ReturnType<WebChatService["getSnapshot"]>;
 //       }
 //     },...options});
 // }
-
-
-   
+      

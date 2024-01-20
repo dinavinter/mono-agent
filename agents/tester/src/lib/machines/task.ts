@@ -9,14 +9,12 @@ import {
   setup, SnapshotFrom,
   StateFrom,
 } from 'xstate';
-import {Page} from 'playwright';
+import type {Page} from 'playwright';
 import {appendToTestFileAsync, formatCode} from '../util';
 import {execPlayWrightCode, getPlayWrightCode} from '../actions/interactWithPage';
 import {BaseContext, contextFactory} from './common';
 
 
-export type TaskMachine = ReturnType<typeof taskMachineSetup.createMachine>;
-export type TaskMachineActor = ActorRefFrom<TaskMachine>
 
 export const taskMachineSetup =  setup({
 
@@ -45,6 +43,7 @@ export const taskMachineSetup =  setup({
 
 
   },
+  
 
   actions: {
     assignCode: assign({
@@ -130,6 +129,8 @@ export const taskMachine = taskMachineSetup.createMachine({
   }
 });
 
+export type TaskMachine = typeof taskMachine;
+export type TaskMachineActor = ActorRefFrom<TaskMachine>
 
 export type TaskMachineMachineOutput = OutputFrom<TaskMachine>;
 export type TaskMachineContext = ContextFrom<TaskMachine>;
