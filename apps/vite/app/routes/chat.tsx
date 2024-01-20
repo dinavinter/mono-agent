@@ -1,16 +1,23 @@
 import {Form, Link, NavLink, Outlet} from '@remix-run/react';
 import {ActionFunctionArgs, LoaderFunctionArgs, redirect} from '@remix-run/node';
-import {PageMachineActor, type WebChatServiceSnapshot} from '@mono-agent/tester';
-import {webService} from '~/services/system.ts';
+import type {PageMachineActor, WebChatServiceSnapshot} from '@mono-agent/tester';
 import {eventStream} from 'remix-utils/sse/server';
 import {useRef} from 'react';
 import {useEventSourceJson} from '~/services/eventSource.ts';
 
+
+import { serverOnly$ } from "vite-env-only";
+
+ 
+
 export async function loader({
                                request,
-                             }: LoaderFunctionArgs) { 
-   return eventStream(request.signal, function setup(send) {
-    const subscription= webService.subscribe(function({context:{pages}}: WebChatServiceSnapshot) {
+                             }: LoaderFunctionArgs) {
+  const   {webService} = await import('~/services/system.server');
+
+  return eventStream(request.signal, function setup(send) {
+
+     const subscription= webService.subscribe(function({context:{pages}}: WebChatServiceSnapshot) {
        send({ data: JSON.stringify(pages.items.map((page: PageMachineActor) => {
             return page.id;
          })) });
@@ -24,7 +31,7 @@ export async function loader({
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-
+  const   {webService} = await import('~/services/system.server');
   const url = formData.get("url") as string;
   webService.send({type: "page", url});
   return redirect(`/chat/${url}`)

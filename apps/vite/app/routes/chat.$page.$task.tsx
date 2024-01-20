@@ -2,8 +2,8 @@ import {ActionFunctionArgs} from '@remix-run/node';
 import { eventStream } from "remix-utils/sse/server";
 
 import {useParams} from '@remix-run/react';
-import {webService} from '~/services/system.ts';
-import {TaskMachineEvent, TaskServiceSnapshot} from '@mono-agent/tester';
+import {webService} from '~/services/system.server';
+import type {TaskMachineEvent, TaskServiceSnapshot} from '@mono-agent/tester';
 import {useEventSourceBatchJson} from '~/services/eventSource.ts';
 
 export async function loader({request}: ActionFunctionArgs) {

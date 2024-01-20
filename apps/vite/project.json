@@ -1,0 +1,103 @@
+{
+  "name": "vite",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/vite",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build-r": {
+      "executor": "@nx/remix:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/remix"
+      }
+    },
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/vite"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "vite:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "vite:build:development"
+        },
+        "production": {
+          "buildTarget": "vite:build:production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "vite:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "vite:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "vite:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "serve-r": {
+      "executor": "@nx/remix:serve",
+      "options": {
+        "command": "pnpm exec remix-serve build/index.js",
+        "manual": true,
+        "port": 4200
+      }
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "command": "remix-serve build/index.js",
+      "options": {
+        "cwd": "apps/vite"
+      }
+    },
+    "typecheck": {
+      "command": "tsc",
+      "options": {
+        "cwd": "apps/vite"
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/apps/remix"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "remix:build",
+        "port": 4200
+      }
+    }
+  }
+}

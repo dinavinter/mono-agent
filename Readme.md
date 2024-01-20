@@ -61,6 +61,9 @@ nx jstest:test
 ```
 ## Create new agent
 ```shell
+nx g lib tester --directory=agents/tester --buildable --publishable --importPath=@mono-agents/tester --projectNameAndRootFormat="as-provided" --simpleModuleName=true --unitTestRunne=none --compiler=swc
+```
+```shell
 nx g @nx/js:lib <agent-name> --directory=agents/<agent-name>
 ```
 

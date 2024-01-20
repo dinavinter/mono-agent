@@ -1,11 +1,11 @@
 import {ActionFunctionArgs} from '@remix-run/node';
-import {
+import type {
   PageMachineActor,
   PageServiceSnapshot, TaskMachineActor,
 } from '@mono-agent/tester';
 import {useLocation, Form, useParams, Outlet, NavLink, json} from '@remix-run/react';
 import { useEffect, useRef } from "react";
-import {webService} from '~/services/system.ts';
+import {webService} from '~/services/system.server';
 import { eventStream } from 'remix-utils/sse/server';
 import {useEventSourceBatch} from '~/services/eventSource.ts';
   
