@@ -1,0 +1,37 @@
+{
+  "name": "tester",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "agents/tester/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/agents/tester",
+        "tsConfig": "agents/tester/tsconfig.es.json",
+        "packageJson": "agents/tester/package.json",
+        "main": "agents/tester/src/index.ts",
+        "generateExportsField": true,
+        "generatePackageJson": true,
+        "assets": ["agents/tester/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs tester {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "agents/tester/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
