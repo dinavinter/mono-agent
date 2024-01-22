@@ -266,3 +266,4 @@ tmp/
 # Project exclude paths
 /tools/types/src/lib/types.d.ts
 /tools/types/src/index.d.ts
+build/
