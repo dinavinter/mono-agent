@@ -1,10 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "module": "es2022",
-    "moduleResolution": "Bundler",
-    "target": "ESNext",
+    "rootDir": ".", 
     "noPropertyAccessFromIndexSignature": false,
     "esModuleInterop": true,
     "sourceMap": true,
