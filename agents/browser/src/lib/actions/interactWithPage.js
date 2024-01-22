@@ -5,7 +5,7 @@ import {
   parseSite,
   preprocessJsonInput,
   appendToTestFile,
-} from '~/util';
+} from '../util';
 
 const AsyncFunction = async function () {}.constructor;
 

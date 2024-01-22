@@ -1,17 +1,17 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
-
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import fs from 'fs';
 import tsconfigPaths from "vite-tsconfig-paths";
-
+import * as path from 'path';
 
 export default defineConfig({
-  root: __dirname,
+  // root: __dirname,
   cacheDir: '../../node_modules/.vite/agents/browser',
-  optimizeDeps: {
-    include: ['linked-dep'],
-  },
+  // optimizeDeps: {
+  //   include: ['linked-dep'],
+  // },
+  
+  
   plugins: [nxViteTsPaths(), tsconfigPaths()],
 
   // Uncomment this if you are using workers.
@@ -19,29 +19,12 @@ export default defineConfig({
   //  plugins: [ nxViteTsPaths() ],
   // },
   build:{
-    minify:false,
     lib: {
-      entry: '/src/index.js',
-      formats: ['cjs'],
+      entry: path.resolve(__dirname, 'src/index.js'),
+      formats: ['es', "cjs", "umd"],
       fileName: 'index',
-    },
-    
-    manifest: true,
-    outDir: '../../dist/agents/browser',
-    emptyOutDir: true,
-    sourcemap: true,
-    target: 'node',
-    
-    write: true,
-    rollupOptions: {
-      // overwrite default .html entry
-      input: '/src/index.js',
-      
-    },
-    commonjsOptions: {
-      include: [/linked-dep/, /node_modules/],
-    },
-
+        
+    }
   },
   test: {
     globals: true,

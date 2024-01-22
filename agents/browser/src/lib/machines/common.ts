@@ -1,81 +1,36 @@
-import {BaseChatModel} from 'langchain/dist/chat_models/base';
-import {ChatOpenAI} from 'langchain/chat_models/openai';
-import {
+import  {ChatOpenAI} from 'langchain/chat_models/openai';
+import type {BaseChatModel} from 'langchain/chat_models/base';
+
+
+import type{
   ActorRef, AnyActorRef,
-  ContextFactory,
   EventObject,
   MachineContext,
-  ProvidedActor,
-  SetupTypes, StateValue,
-} from 'xstate/dist/declarations/src/types';
-import {Spawner} from 'xstate/dist/declarations/src/spawn';
-import type {MachineSnapshot} from 'xstate/dist/declarations/src/State';
+  ProvidedActor,  StateValue,Spawner, MachineSnapshot
+} from 'xstate';
+
+// export type BaseChatModel  =any;
+
+export type ChatModelLike = {
+  
+}
 
 export type BaseContext = {
-  chatApi?: BaseChatModel
-  llm?: BaseChatModel
+  chatApi?: ChatModelLike
+  llm?: ChatModelLike
   outputFilePath: string
 
 } & MachineContext
 
 
 export type BaseInput = {
-  chatApi?: BaseChatModel
-  llm?: BaseChatModel
+  chatApi?: ChatModelLike
+  llm?: ChatModelLike
+  outputFilePath: string
+
 
 }
-
-export type ItemWithId<TItem, TIdField extends string = "id", TIdType = number>=  TItem &    {
-   [P in TIdField]: TIdType;
-}
-
-export function entitySet <TItem, TIdField extends string = "id", TIdType = number>(field:TIdField ="id" as TIdField ){
-  const items= [] as ItemWithId<TItem, TIdField, TIdType>[];
-  const id =0;
-  
-  const set ={
-    items: items,
-    push(item: TItem) {
-      this.items.push(item);
-      return this;
-    },
-    add(item: TItem){
-      const id = this.autoIncrementId.next();
-      return this.push({...item, [field]: id})  
-    },
-    remove(item: TItem) {
-      this.items = this.items.filter(i => i !== item);
-      return this;
-    },
-    removeAt(id: TIdType){
-      this.items = this.items.filter(i => i[field] !== id);
-      return this;
-
-    },
-     get first() {
-      return items[0];
-    },
-    get last() {
-      return items.length && items[this.items.length - 1];
-    },
-    autoIncrementId: {
-      _id: 0,
-      next() {
-        return this._id++;
-      }
-
-    }
-
-  }
-  set.push.bind(set);
-  set.remove.bind(set);
-  set.autoIncrementId.next.bind(set.autoIncrementId);
-
-  return set;
-}
-
-export type EntitySet<TItem> = ReturnType<typeof entitySet<TItem>>;
-
+ 
 type ContextFactoryBase= <TContext extends BaseContext, TActor extends ProvidedActor, TInput extends BaseInput & Partial<TContext>, TEvent extends EventObject = EventObject>  ({ spawn, input, self }: {
   spawn: Spawner<TActor>;
   input: TInput;
@@ -111,14 +66,14 @@ export function contextFactoryWith <TInput extends Partial<TContext>, TContext e
   } 
 } 
 
-export function contextFactoryWithFactory<TInput extends Partial<TContext>, TContext extends BaseContext= BaseContext>(factory:ContextFactoryBase){
-  return factoryFn;
-  function factoryFn({input, ...more}: {input: TInput } & any) {
-    const enrich = factory({input, ...more});
-    return  contextFactory({input: { ...input, ...enrich},  ...more});
+// export function contextFactoryWithFactory<TInput extends Partial<TContext>, TContext extends BaseContext= BaseContext>(factory:ContextFactoryBase){
+//   return factoryFn;
+//   function factoryFn({input, ...more}: {input: TInput } & any) {
+//     const enrich = factory({input, ...more});
+//     return  contextFactory({input: { ...input, ...enrich},  ...more});
+//
+//   }
+// }
 
-  }
-}
-
-type InputFromSetup<TSetup extends SetupTypes<any, any, any, any, any, any> >= TSetup extends SetupTypes<infer TContext, infer TEvent, infer TChildrenMap, infer TTag, infer TInput, infer TOutput> ? TInput : never;
+// type InputFromSetup<TSetup extends SetupTypes<any, any, any, any, any, any> >= TSetup extends SetupTypes<infer TContext, infer TEvent, infer TChildrenMap, infer TTag, infer TInput, infer TOutput> ? TInput : never;
  

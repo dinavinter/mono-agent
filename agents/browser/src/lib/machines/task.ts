@@ -9,16 +9,12 @@ import {
   setup, SnapshotFrom,
   StateFrom,
 } from 'xstate';
-import {Page} from 'playwright';
-import {BaseChatModel} from 'langchain/dist/chat_models/base';
-import {ContextFactory, SetupTypes} from 'xstate/dist/declarations/src/types';
+import type {Page} from 'playwright';
 import {appendToTestFileAsync, formatCode} from '../util';
 import {execPlayWrightCode, getPlayWrightCode} from '../actions/interactWithPage';
 import {BaseContext, contextFactory} from './common';
 
 
-export type TaskMachine = ReturnType<typeof taskMachineSetup.createMachine>;
-export type TaskMachineActor = ActorRefFrom<TaskMachine>
 
 export const taskMachineSetup =  setup({
 
@@ -47,6 +43,7 @@ export const taskMachineSetup =  setup({
 
 
   },
+  
 
   actions: {
     assignCode: assign({
@@ -63,9 +60,8 @@ export const taskMachineSetup =  setup({
 })
 
 
-type InferContextFactory<TSetup extends SetupTypes<any, any, any, any, any, any> >= TSetup extends SetupTypes<infer TContext, infer TEvent, infer TChildrenMap, infer TTag, infer TInput, infer TOutput> ? ContextFactory<TContext, any, TInput, TEvent> : never;
 
-export const taskMachine:TaskMachine = taskMachineSetup.createMachine({
+export const taskMachine = taskMachineSetup.createMachine({
   context: contextFactory,
   initial: 'generate-code',
   states: {
@@ -133,6 +129,8 @@ export const taskMachine:TaskMachine = taskMachineSetup.createMachine({
   }
 });
 
+export type TaskMachine = typeof taskMachine;
+export type TaskMachineActor = ActorRefFrom<TaskMachine>
 
 export type TaskMachineMachineOutput = OutputFrom<TaskMachine>;
 export type TaskMachineContext = ContextFrom<TaskMachine>;

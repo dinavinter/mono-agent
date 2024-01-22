@@ -1,23 +1,17 @@
 import {
-  ActorRefFrom,
+  ActorRefFrom, AnyEventObject,
   assign,
-  ContextFrom, createActor,
-  DoneActorEvent,
+  ContextFrom, DoneActorEvent,
   ErrorActorEvent,
-  fromPromise,
-  OutputFrom, raise,
-  sendTo,
+  fromPromise, OutputFrom, sendTo,
   setup, SnapshotFrom,
 } from 'xstate';
 import {doActionWithAutoGPT} from '../autogpt';
 import {createTestFileAsync} from '../util';
-import {chromium, Page} from 'playwright';
-import {BaseChatModel} from 'langchain/dist/chat_models/base';
-import {BrowserContext} from '@playwright/test';
-import {contextFactory, contextFactoryWith, EntitySet} from './common';
-import {Message, pageMachine} from './page';
-import {taskMachineSetup} from './task';
-
+import  {chromium, type Page, type BrowserContext} from 'playwright';
+import {BaseContext, contextFactoryWith} from './common';
+import {Message, pageMachine, PageMachineActor} from './page';
+ 
 
     
  
@@ -48,12 +42,11 @@ import {taskMachineSetup} from './task';
 //     {guard: inState('auto'), target: 'auto', reenter: true}];
 
 
-export type WebChatMachine =  ReturnType<typeof webChatMachineSetup.createMachine>;
 
 
 
 
-export const webChatMachineSetup =  setup({
+const  webChatMachineSetup =  setup({
   actors: {
     createTestFile: fromPromise(({input: {outputFilePath}}: {
       input: {outputFilePath: string;};
@@ -73,12 +66,12 @@ export const webChatMachineSetup =  setup({
   actions: {
     assignBotMessage: assign({
       messages: ({context: {messages}, event}) => {
-        return messages.add({role: 'bot', content: event});
+        return messages.concat({role: 'bot', content: event});
       }
     }),
     assignHumanMessage: assign({
       messages: ({context: {messages}, event}) => {
-        return messages.add({role: 'human', content: event});
+        return messages.concat({role: 'human', content: event});
       }
     }),
     sendTask: sendTo('page-gpt', ({event: {task}}: {event: {task: string}}) => ({
@@ -92,40 +85,41 @@ export const webChatMachineSetup =  setup({
 
     assignError: assign({
       errors: ({context: {errors}, event}) => {
-        return errors.add(event);
+        return errors.concat(event as ErrorActorEvent);
       }
     }),
     assignBrowser: assign({
-      browser: ({event: {output}}: {event: DoneActorEvent<BrowserContext>}) => output
+      browser: ({event: {output}}: {event: AnyEventObject}) => output
     }),
+    
     assignPageMachine: assign({
-      pages: ({context: {pages, chatApi, browser, outputFilePath}, event, spawn}) => pages.push(spawn('pageGPT', {
-          id: "page-gpt",
-          systemId: `page-gpt-${pages.autoIncrementId.next()}`,
-          input: {
-            url: event.type === "page" && event.url || 'https://www.google.com',
-            chatApi: chatApi,
-            browser: browser!,
-            outputFilePath
-          },
-          syncSnapshot: true,
-        }
-      )),
-    }),
-  
-     logSnapshot: ({event}) => console.log(event),
+      pages: ({context: {pages, chatApi, browser, outputFilePath}, event, spawn}) => pages.concat(
+        spawn('pageGPT', {
+            id: 'page-gpt',
+            systemId: `pages-${pages.length +1}`,
+            input: {
+              url: event.type === "page" && event.url || 'https://www.google.com',
+              chatApi: chatApi,
+              browser: browser!,
+              outputFilePath
+            },
+            syncSnapshot: true,
+          }))
+        }),
+
+      logSnapshot: ({event}) => console.log(event),
   },
   types: {
     context: {} as {
       browser: BrowserContext | undefined,
       viewport: string | undefined,
       outputFilePath: string,
-      chatApi: BaseChatModel ,
-      messages: EntitySet<Message>
-      errors: EntitySet<any>,
-      pages: EntitySet<ActorRefFrom<typeof pageMachine> >,
-    },
+      messages: Message[]
+      errors: ErrorActorEvent[],
+      pages: PageMachineActor[],
+    }& BaseContext,
     events: {} as
+      | AnyEventObject
       | { type: 'page.created'; page: Page }
 
       | { type: 'page' , url: string}
@@ -149,7 +143,9 @@ export const webChatMachineSetup =  setup({
   },
 
 });
-export const webChatMachine = webChatMachineSetup
+
+
+const webChatMachine = webChatMachineSetup
   .createMachine({
     context: contextFactoryWith(({input})=>({
       url: input.url || "https://www.google.com",
@@ -199,24 +195,26 @@ export const webChatMachine = webChatMachineSetup
         }
       } 
     }
-  })
+  }) ;
 
+export type WebChatMachineType =  typeof webChatMachine;
+export  const WebChatMachine:WebChatMachineType = webChatMachine
 
-
-
-export type WebChatService = ActorRefFrom<WebChatMachine>
+export type WebChatContext = ContextFrom<typeof webChatMachine>;
+export type WebChatEvent = OutputFrom<typeof webChatMachine>;
+export type WebChatState = SnapshotFrom<typeof webChatMachine>;
+ 
+export type WebChatService = ActorRefFrom<WebChatMachineType>
 export type WebChatServiceSnapshot = ReturnType<WebChatService["getSnapshot"]>;
-export const createWebChatService = (options: Parameters<typeof createActor<typeof  webChatMachine>>[1]):WebChatService => {
-  return createActor(webChatMachine, { inspect: {
-      next(state) {
-        console.log("next", state);
-      },
-      error(state) {
-        console.log("error", state);
-      }
-    },...options});
-}
 
-export const WebChatMachine = webChatMachine;
-
-   
+// export const createWebChatService = (options: Parameters<typeof createActor<typeof  webChatMachine>>[1]):WebChatService => {
+//   return createActor(webChatMachine, { inspect: {
+//       next(state) {
+//         console.log("next", state);
+//       },
+//       error(state) {
+//         console.log("error", state);
+//       }
+//     },...options});
+// }
+      

@@ -2,17 +2,21 @@
   "name": "browser",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "agents/browser/src",
-  "projectType": "application",
+  "projectType": "library",
   "targets": {
-    "start": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node ./src/cli.js",
-        "cwd": "packages/cli"
-      }
-    },
     "build": {
       "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/agents/browser",
+        "tsConfig": "agents/browser/tsconfig.lib.json",
+        "packageJson": "agents/browser/package.json",
+        "main": "agents/browser/src/index.ts",
+        "assets": ["agents/browser/*.md"]
+      }
+    },
+    "build-v": {
+      "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/agents/browser",
@@ -25,10 +29,14 @@
     "build:cli": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "defaultConfiguration": "development",
       "options": {
-        "outputPath": "dist/cli/browser",
-        "buildLibsFromSource": true,
+        "outputPath": "dist/agents/browser",
+        "tsConfig": "agents/browser/tsconfig.lib.json",
+        "packageJson": "agents/browser/package.json",
+        "main": "agents/browser/src/index.ts",
+        "assets": ["agents/browser/*.md"],
+        "buildLibsFromSource": false,
         "skipTypeCheck": false,
         "configFile": "agents/browser/vite.config.ts",
         "watch": true,
@@ -42,13 +50,6 @@
         "production": {
           "mode": "production"
         }
-      }
-    },
-    "build:cli:swc": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx browser build -o=../../dist/agents/browser/ ./src/cli.js",
-        "cwd": "agents/browser"
       }
     },
     "publish": {

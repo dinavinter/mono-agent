@@ -2,32 +2,26 @@
   "name": "@mono-agent/browser",
   "version": "1.0.0",
   "description": "",
-  "private": false,
-
   "type": "module",
+  "private": false,
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
-
+  "files": [
+    "src"
+  ],
+  "module": "./src/index.es.js",
   "exports": {
-    "cli":{
-      "import": "./dist/cli.js",
-      "require": "./dist/cli.cjs"
-    },
-    "main": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+    ".": {
+      "import": "./src/index.es.js",
+      "require": "./src/index.umd.js"
     }
-   
-  },
-
-  "scripts": {
-    "start": "node src/cli.js",
-    "prepares": "husky install"
   },
   "author": "",
   "license": "ISC",
+ 
   "dependencies": {
-    "@colors/colors": "^1.5.0",
+     "@colors/colors": "^1.5.0",
+    "@langchain/core": "^0.1.6",
     "@lifeomic/attempt": "^3.0.3",
     "commander": "^10.0.0",
     "dotenv": "^16.0.3",

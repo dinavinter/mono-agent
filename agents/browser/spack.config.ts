@@ -9,7 +9,7 @@ module.exports = config({
         web: __dirname + "/src/index.ts",
     },
     output: {
-        name: "e2e",
+        name: "browser",
         path: __dirname + "/src"
     },
     module: {
@@ -20,7 +20,7 @@ module.exports = config({
             type: "commonjs"
         },
         isModule:true,
-        cwd: `${process.cwd()}/agents/e2e`
+        cwd: `${process.cwd()}/agents/browser`
         
         
     }

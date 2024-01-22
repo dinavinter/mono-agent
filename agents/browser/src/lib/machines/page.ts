@@ -1,69 +1,109 @@
 import {
   ActorRefFrom,
-  AnyActor,
+  AnyActor, AnyActorRef, AnyEventObject,
   assign,
-  ContextFrom,
+  ContextFrom, DoneActorEvent, enqueueActions, ErrorActorEvent,
   EventFrom,
-  fromPromise,
+  fromPromise, Observer,
   OutputFrom,
   setup,
   StateFrom,
 } from 'xstate';
-import {taskMachine} from './task';
-import {BrowserContext} from '@playwright/test';
-import {Page} from 'playwright';
-import {BaseChatModel} from 'langchain/dist/chat_models/base';
-import {BaseContext,   contextFactoryWith, entitySet, EntitySet} from './common';
-import {Browser} from 'langchain/dist/document_loaders/web/puppeteer';
+import { taskMachine, TaskMachineActor, TaskMachineMachineOutput} from './task';
+import type {Page, BrowserContext} from 'playwright';
+import {BaseContext, BaseInput, contextFactoryWith} from './common';
 
 export type Message = {
   role: 'human' | 'bot',
   content: any
 }
 
+type TaskEvent =   {
+  type: 'task',
+  task: string,
+  feedback?: AnyActorRef
+}  
 export const pageMachineSetup = setup({
 
   types: {
     input: {} as {
       url: string,
       page?: Page,
-      chatApi: BaseChatModel,
       sender?: AnyActor,
       browser: BrowserContext
-    } & BaseContext,
+    } & BaseInput,
     context: {} as {
-      tasks: EntitySet<ActorRefFrom<typeof taskMachine>>,
-      completedTasks: EntitySet<OutputFrom<typeof taskMachine>>,
+      tasks: TaskMachineActor[],
+      currentTask?: TaskMachineActor,
+      completedTasks: TaskMachineActor[],
       page: Page,
-      messages: EntitySet<Message>,
+      messages: Message[],
       url: string,
-      chatApi: BaseChatModel,
       sender?: AnyActor,
       browser: BrowserContext
     } & BaseContext,
+    events: {} as 
+      | AnyEventObject
+      | TaskEvent | {
+      type: 'task.done',
+      output: any
+    } | {
+      type: 'created',
+      task: TaskMachineActor
+    } |DoneActorEvent<Page> | ErrorActorEvent
   },
   actions: {
-    assignPage: assign({
-      page: ({event:{output}}) => output
-    }),
+    assignPage: assign(({event:{output}}:AnyEventObject) => ({
+      page:({event:{output}}:{event:DoneActorEvent<Page>}) =>    output
+    })),
+    onTaskCreated: ()=>{},
+    // enqueueNewTask: enqueueActions(function({ context: {tasks, messages, page, chatApi, outputFilePath, ...options},  event, enqueue, system })  {
+    //   const systemId=`tasks-${tasks.autoIncrementId.next()}`
+    //   const {task, feedback} = event as TaskEvent
+    //   enqueue.spawnChild('taskMachine',{
+    //     systemId: systemId,
+    //     input: {
+    //       page: page,
+    //       task: task,
+    //       chatApi: chatApi,
+    //       outputFilePath
+    //     },
+    //   });
+    //   enqueue.assign({
+    //     tasks: tasks.push(system.get(systemId))
+    //   });
+    //    
+    //   enqueue.assign({
+    //     currentTask: ({context:{tasks}})=> tasks.last
+    //   });
+    //
+    //    
+    //   enqueue.sendTo(feedback, ({system})=>({
+    //     type: 'created',
+    //     task: system.get(systemId)
+    //   }))
+    //  
+    //   enqueue({ type: 'onTaskCreated', params: {task: system.get(systemId)} });
+    //  
+    // }),
     assignNewTask: assign({
-      tasks: ({context: {tasks, messages, page, chatApi, outputFilePath, ...options}, event: {task}, spawn, self}) =>{
-        const taskActor= spawn('taskMachine', {
-           systemId: `tasks-${tasks.autoIncrementId.next()}`,
-           input: {
-             page: page,
-             task: task,
-             chatApi: chatApi,
-             outputFilePath,
-             sender: self
-           },
-         });
-        return tasks.push(taskActor);
-      },
+      currentTask: ({context: {tasks, page, chatApi, outputFilePath}, event,   spawn, self}) =>
+        spawn('taskMachine', {
+          id: `task:${tasks.length+1}`,
+          systemId: `task:${tasks.length+1}`,
+          input: {
+            page: page,
+            task: (event as TaskEvent).task,
+            chatApi: chatApi,
+            outputFilePath,
+            sender: self,
+          },
+        }),
+
     }),
     assignCompletedTask: assign({
-      tasks: ({context: {tasks}, event}) => tasks.removeAt(event.output.id),
-      completedTasks: ({context: {completedTasks}, event}) => completedTasks.push(event.output),
+      tasks: ({context: {tasks, currentTask}}) => currentTask? tasks.concat(currentTask) : tasks,
+      // completedTasks: ({context: {completedTasks,currentTask}, _} ) => completedTasks.push(currentTask),
     }),
 
   },
@@ -86,15 +126,15 @@ export const pageMachineSetup = setup({
 });
 export const pageMachine = pageMachineSetup.createMachine({
   context: contextFactoryWith({
-    tasks: entitySet<ActorRefFrom<typeof taskMachine>>(),
-    messages: entitySet<Message>()
+    tasks: [],
+    messages: []
   }),
   initial: 'loading',
   states: {
     loading: {
       always: [{
         guard: 'pageReady',
-        target: 'loaded',
+        target: 'ready',
       }, {
         guard: 'pageNotReady',
         target: "navigating"
@@ -109,22 +149,30 @@ export const pageMachine = pageMachineSetup.createMachine({
           url: context.url
         }),
         onDone: {
-          target: 'loaded',
+          target: 'ready',
           actions: 'assignPage',
         }
-      },
-      loaded: {
+      }
+    },
+      ready: {
         on: {
           task: {
-            actions: 'assignNewTask',
+            target: 'task',
+            actions: 'assignNewTask'
           },
           'task.done': {
             actions: 'assignCompletedTask',
           },
         }
       },
-
-    },
+      task: {
+        on: {
+          'task.done': {
+            actions: 'assignCompletedTask',
+            target: 'ready' 
+          }
+        }
+      } 
   }
 });
 
@@ -135,3 +183,17 @@ export type PageMachineEvent = EventFrom<PageMachine>;
 export type PageMachineState = StateFrom<PageMachine>
 export type PageMachineActor = ActorRefFrom<PageMachine>;
 export type  PageServiceSnapshot = ReturnType<PageMachineActor["getSnapshot"]>;
+// export  function sendTask(this:PageMachineActor, task: string) {
+//   return new Promise((resolve, reject) => {
+//     if(this.getSnapshot().matches('ready')) {
+//       this.subscribe((state) => {
+//         if (state.matches('task')) {
+//           resolve(state.context.currentTask);
+//         }
+//       })
+//       this.send( {type: 'task', task: task, feedback: resolve});
+//
+//     }
+//   
+//   })
+// }
