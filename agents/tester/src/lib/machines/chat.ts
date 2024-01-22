@@ -1,7 +1,7 @@
 import {
-  ActorRefFrom, AnyEventObject,
+  ActorRefFrom, AnyEventObject, AnyStateMachine,
   assign,
-  ContextFrom, DoneActorEvent,
+  ContextFrom, createActor, DoneActorEvent,
   ErrorActorEvent,
   fromPromise, OutputFrom, sendTo,
   setup, SnapshotFrom,
@@ -60,8 +60,7 @@ const  webChatMachineSetup =  setup({
       
     }),
     pageAutoGPT: fromPromise(doActionWithAutoGPT),
-    pageGPT: pageMachine,
-
+    pageGPT: pageMachine
   },
   actions: {
     assignBotMessage: assign({
@@ -135,8 +134,7 @@ const  webChatMachineSetup =  setup({
       'page-gpt': 'pageGPT';
       'page-auto-gpt': 'pageAutoGPT',
       'create-test-file': 'createTestFile'  ,
-      'init-browser': 'initBrowser' ;
-      
+      'init-browser': 'initBrowser' ; 
     }
 
 
@@ -205,16 +203,57 @@ export type WebChatEvent = OutputFrom<typeof webChatMachine>;
 export type WebChatState = SnapshotFrom<typeof webChatMachine>;
  
 export type WebChatService = ActorRefFrom<WebChatMachineType>
-export type WebChatServiceSnapshot = ReturnType<WebChatService["getSnapshot"]>;
+export type WebChatServiceSnapshot = ReturnType<WebChatService["getSnapshot"]>; 
 
-// export const createWebChatService = (options: Parameters<typeof createActor<typeof  webChatMachine>>[1]):WebChatService => {
-//   return createActor(webChatMachine, { inspect: {
-//       next(state) {
-//         console.log("next", state);
-//       },
-//       error(state) {
-//         console.log("error", state);
-//       }
-//     },...options});
-// }
+
+
+function loggerInspector() {
+  return {
+    next(state:any) {
+      console.log('next', state);
+    },
+    error(state:any) {
+      console.log('error', state);
+    },
+  };
+}
+
+
+export const createWebChatService = (options: Parameters<typeof createActor<typeof  webChatMachine>>[1]):WebChatService => {
+  return createActor(webChatMachine, { 
+    inspect: loggerInspector()
+    ,...options});
+}
+
+
+
+
+/* with store, seems redundant
+export type StoreFactory<TMachine extends AnyStateMachine, TActor extends  ActorRefFrom<TMachine> =ActorRefFrom<TMachine> >={
+  (machine: TMachine): PromiseLike<{
+    set: (state: SnapshotFrom<TActor>) => void;
+    get: () => SnapshotFrom<TActor>;
+  }>
+}
+
+
+export const createWebChatServiceWithStorage = async (options: Parameters<typeof createActor<typeof  webChatMachine>>[1] &{
+  storeFactory:StoreFactory<WebChatMachineType>
+}):Promise<WebChatService> => {
+  const store = await options.storeFactory(WebChatMachine);
+
+
+  const actor = createActor(webChatMachine, {
+    snapshot: store.get(),
+    inspect: loggerInspector(), ...options
+  });
+
+  actor.subscribe((state) => {
+      store.set(state);
+  });
+
+   return actor;
+}
+     
       
+ */
