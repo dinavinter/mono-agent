@@ -7,6 +7,7 @@ import {useLocation, Form, useParams, Outlet, NavLink, json} from '@remix-run/re
 import { useEffect, useRef } from "react";
 import { eventStream } from 'remix-utils/sse/server';
 import {useEventSourceBatch} from '~/services/eventSource.ts';
+import { serverOnly$ } from 'vite-env-only';
   
  export async function action({ request }: ActionFunctionArgs) {
    const   {webService} = await import('~/services/system.server');
@@ -56,7 +57,7 @@ import {useEventSourceBatch} from '~/services/eventSource.ts';
    const   {webService} = await import('~/services/system.server');
 
    const {page} = useParams();
-   return eventStream(request.signal, function setup(send) {
+   return serverOnly$( eventStream(request.signal, function setup(send) {
      const subscription = webService.system.get(page!).subscribe(function({context: {currentTask}}: PageServiceSnapshot) {
        if (currentTask)
          send({data: currentTask.id});
@@ -65,7 +66,7 @@ import {useEventSourceBatch} from '~/services/eventSource.ts';
      return function cleanup() {
        subscription.unsubscribe();
      };
-   })
+   }))
  }
  
 

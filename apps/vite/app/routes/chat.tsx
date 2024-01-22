@@ -8,25 +8,28 @@ import {useEventSourceJson} from '~/services/eventSource.ts';
 
 import { serverOnly$ } from "vite-env-only";
 
+
  
 
 export async function loader({
                                request,
                              }: LoaderFunctionArgs) {
-  const   {webService} = await import('~/services/system.server');
+     const {webService} = await import('~/services/system.server');
 
-  return eventStream(request.signal, function setup(send) {
+    return serverOnly$(eventStream(request.signal, function setup(send) {
 
-     const subscription= webService.subscribe(function({context:{pages}}: WebChatServiceSnapshot) {
-       send({ data: JSON.stringify(pages.map((page: PageMachineActor) => {
+      const subscription = webService.subscribe(function({context: {pages}}: WebChatServiceSnapshot) {
+        send({
+          data: JSON.stringify(pages.map((page: PageMachineActor) => {
             return page.id;
-         })) });
-     })  
- 
-    return function cleanup() {
-      subscription.unsubscribe();
-    };
-  });
+          }))
+        });
+      })
+
+      return function cleanup() {
+        subscription.unsubscribe();
+      };
+    })); 
 }
 
 export async function action({ request }: ActionFunctionArgs) {

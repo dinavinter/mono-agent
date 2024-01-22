@@ -4,12 +4,13 @@ import { eventStream } from "remix-utils/sse/server";
 import {useParams} from '@remix-run/react';
 import type {TaskMachineEvent, TaskServiceSnapshot} from '@mono-agent/tester';
 import {useEventSourceBatchJson} from '~/services/eventSource.ts';
+import { serverOnly$ } from 'vite-env-only';
 
 export async function loader({request}: ActionFunctionArgs) {
   const   {webService} = await import('~/services/system.server');
 
   const {task} = useParams();
-  return eventStream(request.signal, function setup(send) {
+  return serverOnly$(eventStream(request.signal, function setup(send) {
     const subscription= webService.system.get(task!).subscribe(function(snapshot: TaskServiceSnapshot) {
        send({ data: JSON.stringify( snapshot)});
     })
@@ -17,7 +18,7 @@ export async function loader({request}: ActionFunctionArgs) {
     return function cleanup() {
       subscription.unsubscribe();
     };
-  })
+  }))
 }
 
 export default function Index() {
