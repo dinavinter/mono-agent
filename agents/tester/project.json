@@ -4,7 +4,9 @@
   "sourceRoot": "agents/tester/src",
   "projectType": "library",
   "targets": {
+    
     "build": {
+      "$schema": "../../node_modules/@nx/js/src/executors/tsc/schema.json",
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -14,7 +16,10 @@
         "main": "agents/tester/src/index.ts",
         "generateExportsField": true,
         "generatePackageJson": true,
-        "assets": ["agents/tester/*.md"]
+        "assets": ["agents/tester/*.md"],
+        "formats": ["esm", "cjs"],
+        "entryPoints": ["agents/tester/src/index.ts"],
+        "externalBuildTargets": ["agents/tester"],
       }
     },
     "publish": {

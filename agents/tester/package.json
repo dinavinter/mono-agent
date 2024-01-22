@@ -1,11 +1,20 @@
 {
   "name": "@mono-agent/tester",
   "version": "0.0.1",
-  "type": "module",
+  "type": "module", 
   "private": false,
-   "exports": {
-    ".": "./src/index.js"
-    },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "tsup": "tsup src/index.ts --format cjs,esm --dts",
+    "lint": "tsc",
+    "test": "vitest run",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "prepublishOnly": "tsup src/index.ts --dts"
+  },
+
+
   "dependencies": {
     "@colors/colors": "^1.5.0",
     "@langchain/core": "^0.1.6",
@@ -23,5 +32,19 @@
     "prettier": "^2.8.6",
     "prompt": "^1.3.0",
     "xstate": "^5.5.1"
+  },
+  "devDependencies": {
+     "@types/dotenv": "latest",
+    "@types/jsdom": "latest",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "@changesets/cli": "^2.27.1",
+    "@types/node": "^20.10.6",
+    "dotenv": "^16.3.1",
+    "json-schema-to-ts": "^3.0.0",
+    "openai": "^4.24.1"
+
+
   }
 }

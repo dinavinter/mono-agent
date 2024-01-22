@@ -1,9 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-     "allowJs": true,
-    "noEmitOnError": false,
-   },
+     "allowJs": true
+  },
   "files": [],
   "include": [],
   "references": [
@@ -13,5 +12,9 @@
     {
       "path": "./tsconfig.spec.json"
     }
-  ]
+  ],
+  "paths": {
+    "~/*": ["./src/lib/*"],
+    "@eslint.config": [".eslint.config.js"]
+  }
 }

@@ -1,5 +1,5 @@
 import {AnyActorRef, AnyEventObject, createMachine, forwardTo, fromCallback, fromTransition, spawnChild} from 'xstate';
-import {pipeToReadableCallback, streamTransition} from '@/agents/tester/src/lib/streaming/stream';
+import {pipeToReadableCallback} from '../streaming/stream';
 import {ReadableStream} from 'node:stream/web';
 
 type StreamerContext = {
