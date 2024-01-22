@@ -9,7 +9,7 @@
       "executor": "@nx/remix:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/remix"
+        "outputPath": "dist/apps/vite"
       }
     },
     "build": {
@@ -17,7 +17,9 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/vite"
+        "emptyOutDir": true,
+        "outputPath": "apps/vite/build",
+        "configFile": "apps/vite/vite.config.ts"
       },
       "configurations": {
         "development": {
@@ -47,7 +49,8 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "vite:build"
+        "buildTarget": "vite:build",
+        "proxyConfig": "apps/vite/proxy.conf.json"
       },
       "configurations": {
         "development": {
@@ -63,14 +66,20 @@
     "serve-r": {
       "executor": "@nx/remix:serve",
       "options": {
+        "buildTarget": "vite:build-r",
+
         "command": "pnpm exec remix-serve build/index.js",
         "manual": true,
-        "port": 4200
+        "port": 4200,
+        "cwd": "dist/apps/vite"
       }
+    },
+    "devx": {
+      "command": "nx dev vite"
     },
     "start": {
       "dependsOn": ["build"],
-      "command": "remix-serve build/index.js",
+      "command": "remix-serve ./build/index.js",
       "options": {
         "cwd": "apps/vite"
       }
@@ -85,7 +94,7 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/apps/remix"
+        "reportsDirectory": "../../coverage/apps/vite"
       }
     },
     "lint": {
@@ -95,7 +104,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "remix:build",
+        "buildTarget": "vite:build",
         "port": 4200
       }
     }
