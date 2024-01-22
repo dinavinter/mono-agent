@@ -18,6 +18,7 @@ if (exampleParams.length === 0) {
   showExamples();
 }
 const exampleName = exampleParams[0];
+
 const filePath = `./examples/${exampleName}.ts`;
 if (existsSync(filePath)) {
   require(`../${exampleName}.ts`);

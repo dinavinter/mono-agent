@@ -10,6 +10,8 @@
     "lint": "tsc",
     "test": "vitest run",
     "example": "ts-node examples/helpers/runner.ts",
+    "mono": "ts-node examples/helpers/run.ts",
+
     "prepublishOnly": "tsup src/index.ts --dts"
   },
   "keywords": [],
@@ -29,6 +31,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@mono-agent/tester": "workspace:^",
     "xstate": "^5.5.1"
   }
 }
