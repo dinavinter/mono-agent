@@ -5,7 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/agents/browser',
+  cacheDir: '../../node_modules/.vite/agents/e2e',
 
   plugins: [nxViteTsPaths(), tsconfigPaths()],
 
