@@ -5,7 +5,7 @@ export class CDCPage {
   constructor(public readonly page: Page,
               public readonly options: {
                 baseURL: string;
-                afterLoginUrl: string | RegExp
+                afterLoginUrl: string | RegExp 
               }){
 
   }
@@ -15,6 +15,8 @@ export class CDCPage {
     const {baseURL} = this.options;
     await this.page.goto(baseURL);
   }
+  
+   
 
   async afterLogin() {
     const {baseURL, afterLoginUrl} = this.options;

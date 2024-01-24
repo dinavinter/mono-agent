@@ -23,7 +23,7 @@ const params={
 
   
 
-test.describe('login-2-cdp', () => {
+test.describe('universe-login', () => {
 
   test('saml-login', async ({page}) => {
     await initLogin(page);

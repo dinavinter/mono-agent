@@ -2,6 +2,7 @@ import {expect, test, Response} from '@playwright/test';
 import {CDPPage} from './pages/cdp/console';
 import {CDCPage} from './pages/cdc/console';
 import {IdentityAccessPage} from './pages/cdc/apps.identity-access';
+import {expectOk} from './pages/gigya/api';
 
   
 
@@ -60,11 +61,7 @@ test.use({
 
   })
 
-async function  expectOk(response: Response) {
-  expect(response.ok()).toBeTruthy(); 
-  const body= await response.json();
-  expect.soft(body.statusCode).toBe(200);
-}
+
   
   
   

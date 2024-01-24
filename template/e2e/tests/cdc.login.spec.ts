@@ -1,23 +1,9 @@
 import {expect, test } from '@playwright/test';
 import {PaswordlessLoginPage} from './pages/passwordlessLoginPage';
-
-
-
-// // Request context is reused by all tests in the file.
-// let apiContext;
-//
-// test.beforeAll(async ({ playwright }) => {
-//   apiContext = await playwright.request.newContext({
-//     // All requests we send go to this API endpoint.
-//     baseURL: 'https://api.github.com',
-//     // extraHTTPHeaders: {
-//     //   // We set this header per GitHub guidelines.
-//     //   'Accept': 'application/vnd.github.v3+json',
-//     //   // Add authorization token to all requests.
-//     //   // Assuming personal access token available in the environment.
-//     //   'Authorization': `token ${process.env.API_TOKEN}`,
-//     // },
-//   });
+import {CDCPage} from './pages/cdc/console';
+import {IdentityAccessPage} from './pages/cdc/apps.identity-access';
+import {expectOk} from './pages/gigya/api';
+ 
 
   test.use({
     baseURL: 'https://pyzlo.my.console.gigya.com/#/999/4_qIcTAyHP_B9dqBgvCutZxA/dashboard/profiles/user-search',
@@ -38,18 +24,25 @@ const params={
   authFile: 'playwright/.auth/cdc.json'
 }
 
-test.describe('login-2-cdc', () => {
+test.describe('console-login', () => {
 
   test('saml-login', async ({page}) => {
-     await page.goto(params.baseURL);
-     await page.waitForURL(params.loginUrl);
-     await new PaswordlessLoginPage(page).passwordLogin(params.credentials);
-     await page.waitForURL(params.redirectURL);
+      const cdcPage = new CDCPage(page, {
+        baseURL: 'https://pyzlo.my.console.gigya.com/#/999/4_qIcTAyHP_B9dqBgvCutZxA/dashboard/profiles/user-search',
+        afterLoginUrl: 'https://pyzlo.my.console.gigya.com/#/999/4_qIcTAyHP_B9dqBgvCutZxA/dashboard/profiles/user-search',
+      }); 
+      const loginPage = new PaswordlessLoginPage(page, params.loginUrl);
+    
+     await cdcPage.init(); 
+     await loginPage.passwordLogin(params.credentials);
+     await cdcPage.afterLogin();
+     
+     await expectOk(await new IdentityAccessPage(page).search());
+   
      await page.context().storageState({path: params.authFile});
-     const search = await page.waitForResponse(new RegExp('.*/accounts.search'));
-     expect(search.ok()).toBeTruthy();
-
   }) 
+  
+  
 
 })
 

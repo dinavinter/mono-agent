@@ -4,12 +4,18 @@ export class PaswordlessLoginPage {
  
   public readonly page: Page;
 
-  constructor(page: Page){
+  constructor(page: Page,
+              public readonly baseURL?: string | RegExp) {
     this.page = page;
- 
+    
   }
- 
+  
+  async waitForPage() {
+    this.baseURL && await this.page.waitForURL(this.baseURL);
+  }
+   
   async passwordLogin({email, password}: {email: string, password: string}) {
+    await this.waitForPage();
     const page = this.page;
     await page.getByPlaceholder('Email *').click();
     await page.getByPlaceholder('Email *').fill(email);
