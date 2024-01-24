@@ -5,11 +5,16 @@
   "main": "index.js",
   "scripts": {
     "gen": "playwright codegen https://login.gigen.zon.cx/pages/login --output=tests/login",
+    "gen-cdc": "pnpx playwright codegen https://pyzlo.my.console.gigya.com  --output=tests/cdc.login.spec.ts --save-storage=store/cdc-auth.json",
+    "gen-cdp": "pnpx playwright codegen https://pyzlocdp.my.universe.cdp.gigya.com --output=tests/cdp.login.spec.ts --save-storage=store/cdp-auth.json",
+    "gen-cdc-2-cdp": "pnpx playwright codegen https://pyzlocdp.my.universe.cdp.gigya.com --output=tests/cdc-2-cdp.spec.ts --save-storage=store/cdc-2-cdp-auth.json --load-storage=store/cdc-auth.json",
+    "gen-cdp-2-cdc": "pnpx playwright codegen https://pyzlo.my.console.gigya.com --output=tests/cdp-2-cdc.spec.ts --save-storage=store/cdp-2-cdc-auth.json --load-storage=store/cdp-auth.json",
     "test": "playwright test --browser=chromium --ui",
-    
+    "test-cdc": "playwright test tests/.*login.spec.ts --project=chromium --ui  --headed --timeout=1000000  --debug",
     "test-in-docker": "npx playwright test --ui-host=0.0.0.0",
     "ui": "playwright test --browser=chromium --ui --slow-mo=1000",
     "test-html-report": "playwright test --browser=all --reporter=html",
+    "docker:trusted": "docker run -it --rm --ipc=host -p 9090:8080 e2e  /bin/bash",
     "test-json-report": "PLAYWRIGHT_JSON_OUTPUT_NAME=results.json playwright test --browser=chromium --reporter=json"
 
   },

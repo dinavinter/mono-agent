@@ -4,6 +4,7 @@ packages:
   - "sandbox/*" 
   - "tools/*"
   - "pipes/*"
+  - "template/*"
 #  - "storage/*"
 #  - "services/*"
 #  - "components/*"
