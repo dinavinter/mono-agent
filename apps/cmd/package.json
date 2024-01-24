@@ -1,0 +1,19 @@
+{
+  "name": "cmd",
+  "module": "src/main.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest" 
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "serve": "bun run src/main.ts"
+
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
