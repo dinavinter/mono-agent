@@ -1,0 +1,405 @@
+{
+  "cookies": [
+    {
+      "name": "TAsessionID",
+      "value": "e65ce10e-30ca-4031-90a1-a71070256e14|NEW",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1706146956,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "notice_behavior",
+      "value": "implied,eu",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gmid",
+      "value": "gmid.ver4.AcbH77kqqw.NMg-h0fyrgl9d721-fHHJbx7kEVOYZIWrpXyM90Owp3d5KtHTlXjRhPzo7df1YHs.KGQwt0iJ2HujFBaG5oibx5NyU8VXtA-jm7zZgzOAn6XpjoFclpA1mKxfdlyu0GGbGVKiTuQ9g2fXQOBIg5SW9Q.sc3",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1737767727.937706,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ucid",
+      "value": "1WJo9Ojw9YRe7YuAaDHX5A",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1737767727.937794,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "hasGmid",
+      "value": "ver4",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1721866527.937816,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "HasSession",
+      "value": "true",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1706147141.099035,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "gmid",
+      "value": "gmid.ver4.AcbHle66oA.waQvV9bKyphi99GhCh-_A2Gh87yA36HFHk75Aeiais3PEJ37UgGBwogqFbCiI60-.2zEr1_Xx3c5ZcQzpJxL21zQhR8YZHVQKyPTUmDNILd7HXaXLc4kz7b9CAvPGKoKWY7fohKCglq5WeRjXy3uvvA.sc3",
+      "domain": ".login.gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": 1737767566,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ucid",
+      "value": "EQejGkIjISevRf4tLjt84g",
+      "domain": ".login.gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": 1737767566,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "hasGmid",
+      "value": "ver4",
+      "domain": ".login.gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": 1721866366,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_canary_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO",
+      "value": "false",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681160,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_canary_ver_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO",
+      "value": "15703-3-28435755",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681160,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_bootstrap_4_T5bzod0Ed89GPal4tYZTdQ",
+      "value": "login_ver4",
+      "domain": ".gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": 1737681325,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "glt_4_T5bzod0Ed89GPal4tYZTdQ",
+      "value": "st2.s.AcbHCXiQuA.osgP04wWRnleKmbhdRvCcAQJ8WKgNF0eEjX-lM7V46K3CWQds2RjzDwWPxTbwG0pAQeLSikMbOELbTYpqyyeQ2C5-O1za0jQhlyHurExKv2RHVa_3YFRJPlDMazf0evg.zIBhp3FNlHairezFHkaqEojXCmIRVO30FE7pyLPWYJ9nQYgOFPbDNTTD_nE4OFuDjNChxrn2IiZp2ZoG8GS2HQ.sc3",
+      "domain": ".gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_bootstrap_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO",
+      "value": "_gigya_ver4",
+      "domain": ".console.gigya.com",
+      "path": "/",
+      "expires": 1737681337,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "glt_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO",
+      "value": "st2.s.AcbHVGWcpQ.yu8gbKqy9AYfPdGWkIQj3-vtA5mrQ2ZIise-BZYP2lXxCserJMZ0TWr5871ga9FM1vfWdM6uTOq7KiKaClcfijyov5xmrKiVzyYbJpNIVZ9r_O1z2iGxQDtQK5ZYGCUe.9l8gvLjHjDzbb0pc_LvHu7K1h-bz6J7Tz_Kwao8HZcrW5Fbtk8MsYC-Yi7QErDdfuK4-wi-02FZ6-tIiU9EGGQ.sc3",
+      "domain": ".console.gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_canary",
+      "value": "false",
+      "domain": ".pyzlo.my.console.gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_canary_ver",
+      "value": "15703-3-28435755",
+      "domain": ".pyzlo.my.console.gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_canary",
+      "value": "false",
+      "domain": ".pyzlocdp.my.universe.cdp.gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_canary_ver",
+      "value": "15703-3-28435740",
+      "domain": ".pyzlocdp.my.universe.cdp.gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_bootstrap_3_HKpdZfetzxHyjkM5uA1iJhrYKFoOu-Crv_HZWDJLBBcI9xjh_d1lhY0ti9-LR1nn",
+      "value": "_gigya_ver4",
+      "domain": ".universe.cdp.gigya.com",
+      "path": "/",
+      "expires": 1737681333,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_loginToken_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO_visited",
+      "value": "%2C3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO%2C3_HKpdZfetzxHyjkM5uA1iJhrYKFoOu-Crv_HZWDJLBBcI9xjh_d1lhY0ti9-LR1nn",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681337,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_canary_ver",
+      "value": "15703-3-28435755",
+      "domain": ".universe.cdp.gigya.com",
+      "path": "/",
+      "expires": 1737681333,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_loginToken_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO_revoked_tokens",
+      "value": "%2Cst2.s.AcbHVGWcpQ.yu8gbKqy9AYfPdGWkIQj3-vtA5mrQ2ZIise-BZYP2lXxCserJMZ0TWr5871ga9FM1vfWdM6uTOq7KiKaClcfijyov5xmrKiVzyYbJpNIVZ9r_O1z2iGxQDtQK5ZYGCUe.9l8gvLjHjDzbb0pc_LvHu7K1h-bz6J7Tz_Kwao8HZcrW5Fbtk8MsYC-Yi7QErDdfuK4-wi-02FZ6-tIiU9EGGQ.sc3",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681321,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_canary",
+      "value": "false",
+      "domain": ".login.gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_canary_ver",
+      "value": "15703-3-28435755",
+      "domain": ".login.gid.admin.pyzlo.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gig_llu",
+      "value": "b2b",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1737767728.902292,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gig_llp",
+      "value": "saml-41862150",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1737767728.902376,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "glt_3_HKpdZfetzxHyjkM5uA1iJhrYKFoOu-Crv_HZWDJLBBcI9xjh_d1lhY0ti9-LR1nn",
+      "value": "st2.s.AcbHsqdp8g.YjIzz6WX_9m-Pe7jr7kZXGx190ge9U26dDrAdplxvBm-LJMUtU1tcmPL0pGeSwO2v5Doq7mawyThkjmLi1msLe3RJSn115eyNHsMlcHp_TG_XxHHFgRRUAXsL0RO9m8K.tKvEyoFifu0VSA6dz2WYL6xKDDHV9DEsJKv99A5QLhPbrHyy5b0Sh9V2yDRE507Lk3PkWioLa07gmxj9LDV7AQ.sc3%7CUUID%3Dc2978cedadf745d889c906fa4ff80c81",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gig_loginToken_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO",
+      "value": "st2.s.AcbHsqdp8g.YjIzz6WX_9m-Pe7jr7kZXGx190ge9U26dDrAdplxvBm-LJMUtU1tcmPL0pGeSwO2v5Doq7mawyThkjmLi1msLe3RJSn115eyNHsMlcHp_TG_XxHHFgRRUAXsL0RO9m8K.tKvEyoFifu0VSA6dz2WYL6xKDDHV9DEsJKv99A5QLhPbrHyy5b0Sh9V2yDRE507Lk3PkWioLa07gmxj9LDV7AQ.sc3",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681333,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gig_loginToken_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO_exp",
+      "value": "1737681330746",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681330,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "SessionDC",
+      "value": "eu5",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "apiDomain_3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO",
+      "value": "us1.gigya.com",
+      "domain": ".cdns.us1.gigya.com",
+      "path": "/",
+      "expires": 1737681337,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "AuthToken",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFIY1FvS0hrazJrMSJ9.eyJhdWQiOiJjb25zb2xlIiwiZXhwIjoiMTcwNjE0NzE0MCIsImlhdCI6IjE3MDYxNDUzNDAiLCJ4c3JmIjoiNjI3N0M0NTYxQ0VBRUQ3RiJ9.MoUa793iEwJa6iyl-2hQkzZxCb0MXBWshukpbznvlOgcAoXJ6fPCcfzFCxasfLejBjIc3TXTA1RhLvDNIU0TFWygIZF6yT4NqIWpJX3H-Jd-Gzd8pk-_IraJjSexsk0U9jV6qYTNMSzXCS2nYgur4bfD2x4-pWdXgsyDQbKUpZB2NOOqiBLPZR-Yb6mjo8fiCBQDa0oipoFb3Vt9L-e_vnUaGFHMZg9ekdveY_WIhX1J-DrgkO99NaKfmMPzWphp1idEp4vHVwplqxqZA5RY0v7HHsUbQULf28f5PYzW-KAXzQJVQxqTCd-Sv0KfoL2bP0M5VfMSKlu3QK-GXBbGaQ",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1706147141.097657,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "XSRF-TOKEN",
+      "value": "6277C4561CEAED7F",
+      "domain": ".gigya.com",
+      "path": "/",
+      "expires": 1706147141.098846,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://pyzlo.my.console.gigya.com",
+      "localStorage": [
+        {
+          "name": "3_sqD_aFV2w0q-2JSJ-RvvtJ_ziK7_dYmMxuAv4co0-hYA43Wjv4LSTDDEUJCmQ0LO_gig",
+          "value": "{}"
+        },
+        {
+          "name": "gigyaGlobalDateConfig",
+          "value": "{\"timezone\":\"locale\",\"dateFormat\":\"MMM d, y, H:mm:ss\"}"
+        },
+        {
+          "name": "userSelectedTheme",
+          "value": "sap_fiori_3"
+        }
+      ]
+    },
+    {
+      "origin": "https://login.gid.admin.pyzlo.com",
+      "localStorage": [
+        {
+          "name": "4_T5bzod0Ed89GPal4tYZTdQ_gig",
+          "value": "{}"
+        },
+        {
+          "name": "4_T5bzod0Ed89GPal4tYZTdQ_preferences",
+          "value": "{\"authentication\":{\"usersPreferredLoginMethods\":[{\"identifier\":\"b2b.e2e.test@gmail.com\",\"preferredLoginMethod\":\"password\"}],\"tfaPreferredMethod\":\"\"}}"
+        }
+      ]
+    },
+    {
+      "origin": "https://pyzlocdp.my.universe.cdp.gigya.com",
+      "localStorage": [
+        {
+          "name": "last-user-activity-stamp",
+          "value": "1706145342960"
+        },
+        {
+          "name": "selected-theme",
+          "value": "sap_horizon_dark"
+        },
+        {
+          "name": "last-selected-workspace-id",
+          "value": "41862150"
+        },
+        {
+          "name": "last-selected-tenant-id",
+          "value": "CdpTestTenant"
+        },
+        {
+          "name": "3_HKpdZfetzxHyjkM5uA1iJhrYKFoOu-Crv_HZWDJLBBcI9xjh_d1lhY0ti9-LR1nn_gig",
+          "value": "{}"
+        },
+        {
+          "name": "last-selected-business-unit-id",
+          "value": "4_SXRL654TOPTxB_bovpZ2JA"
+        }
+      ]
+    }
+  ]
+}
