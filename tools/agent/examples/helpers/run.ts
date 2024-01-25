@@ -23,7 +23,8 @@ const exampleName = exampleParams[0];
 const filePath = `@mono-agent/${exampleName}`;
   
 try {
-  const machine = require(require.resolve(filePath))
+  // const machine = require(require.resolve(filePath))
+  const {defult:machine} = await import(filePath) ;
   const actor = createActor(machine);
   actor.subscribe((s) => {
     console.log(s.value, s.context);

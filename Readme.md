@@ -81,3 +81,7 @@ nx g @nx/js:lib <pipe-name> --directory=pipes/<pipe-name>
 ```shell
 nx g @nx/js:lib <tool-name> --directory=tools/<tool-name>
 ```
+
+## Add build target
+pnpx nx g @nx/rollup:configuration --project <tester> --main <agents/tester/src/index.ts> tsConfig tsconfig.lib.json --buildTarget rollup --compiler swc
+ 

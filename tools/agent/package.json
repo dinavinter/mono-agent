@@ -1,16 +1,19 @@
 {
-  "name": "@statelyai/agent",
+  "name": "@mono-agent/agent",
   "version": "0.0.2",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "tsup": "tsup",
+    "build:tsup": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "tsc",
     "test": "vitest run",
     "example": "ts-node examples/helpers/runner.ts",
-    "mono": "ts-node examples/helpers/run.ts",
+    "mono": "ts-node examples/helpers/run.ts tester",
+    "hey":"nx g @nx/js:setup-build --project agent --buildTarget build --bundler swc examples/helpers/run.ts",
 
     "prepublishOnly": "tsup src/index.ts --dts"
   },
@@ -32,6 +35,8 @@
   },
   "dependencies": {
     "@mono-agent/tester": "workspace:^",
-    "xstate": "^5.5.1"
+    "xstate": "^5.5.1",
+    "dotenv": "^16.3.1"
+
   }
 }

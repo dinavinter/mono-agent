@@ -5,7 +5,10 @@ import {nxViteTsPaths} from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { installGlobals } from "@remix-run/node";
 // import { cjsInterop } from "vite-plugin-cjs-interop";
 import { visualizer } from "rollup-plugin-visualizer";
-import {createWatchPaths} from '@nx/remix';
+// import {createWatchPaths} from '@nx/remix';
+import topLevelAwait from "vite-plugin-top-level-await";
+import dts from "vite-plugin-dts";
+
 
 installGlobals();
 
@@ -45,7 +48,8 @@ async function getConfig():Promise<UserConfig> {
     // ssr:{
     //   external: ['@mono-agent/tester'],
     //   target:'node'
-    // },
+    // }
+    
 
     plugins: [tsconfigPaths(),
       // cjsInterop({
@@ -75,6 +79,11 @@ async function getConfig():Promise<UserConfig> {
       }), 
       nxViteTsPaths(),
       visualizer({ emitFile: true }),
+      topLevelAwait(),
+      dts({
+        entryRoot: 'src',
+      })
+ 
     ],
   };
 }

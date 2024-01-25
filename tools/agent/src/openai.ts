@@ -252,3 +252,5 @@ export function createAgent<
 
   return agentSettings as any;
 }
+
+export default createAgent;

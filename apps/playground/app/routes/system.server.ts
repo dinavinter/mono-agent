@@ -8,7 +8,7 @@ const sessionCookie = createCookie('__web-chat_session', {
   sameSite: true,
 });
 
-const {getSession, commitSession, destroySession} =
+const {getSession} =
   createFileSessionStorage({
     // The root directory where you want to store the files.
     // Make sure it's writable!
@@ -23,27 +23,28 @@ export async function hydrateSessionStorage() {
     sessionCookie.name,
   );
 
-  return createWebChatService({
+  const service =  createWebChatService({
     snapshot: session.get(machine.id),
     inspect: {
-      next(state) {
+      next(state:any) {
         if (state.type === '@xstate.snapshot') {
           session.set(machine.id, state);
         }
         console.log('next', state);
       },
-      error(state) {
+      error(state:any) {
         console.error('error', state);
       }
 
     }
   })
+   service.start();
+
+   return service;
  
 }
 
     
 
-const service = await hydrateSessionStorage();
- service.start();
 
-export const webService= service;
+export const webService= hydrateSessionStorage;

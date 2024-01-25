@@ -67,7 +67,6 @@
       "executor": "@nx/remix:serve",
       "options": {
         "buildTarget": "vite:build-r",
-
         "command": "pnpm exec remix-serve build/index.js",
         "manual": true,
         "port": 4200,

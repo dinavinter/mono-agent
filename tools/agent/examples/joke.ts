@@ -8,7 +8,7 @@ import {
   raise,
   setup,
 } from 'xstate';
-import { createAgent } from '../src';
+import { createAgent } from '@mono-agent/agent';
 import { loadingAnimation } from './helpers/loader';
 
 const openai = new OpenAI({
