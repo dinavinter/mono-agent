@@ -109,7 +109,11 @@ const  webChatMachineSetup =  setup({
       logSnapshot: ({event}) => console.log(event),
   },
   types: {
-    context: {} as {
+    context: {
+      errors:[],
+      messages: [],
+      pages: []
+    } as {
       browser: BrowserContext | undefined,
       viewport: string | undefined,
       outputFilePath: string,

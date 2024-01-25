@@ -5,7 +5,9 @@
     "target": "ESNext",
     "moduleResolution": "Bundler",
     "outDir": "../../dist/out-tsc",
-    "types": ["node"]
+    "types": ["node"],
+   "allowImportingTsExtensions": true
+    
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": ["src/**/*.ts"]

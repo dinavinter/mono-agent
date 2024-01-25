@@ -4,8 +4,7 @@
   "sourceRoot": "agents/tester/src",
   "projectType": "library",
   "targets": {
-    
-    "build": {
+    "tsc": {
       "$schema": "../../node_modules/@nx/js/src/executors/tsc/schema.json",
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
@@ -19,7 +18,7 @@
         "assets": ["agents/tester/*.md"],
         "formats": ["esm", "cjs"],
         "entryPoints": ["agents/tester/src/index.ts"],
-        "externalBuildTargets": ["agents/tester"],
+        "externalBuildTargets": ["agents/tester"]
       }
     },
     "publish": {
@@ -35,6 +34,65 @@
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "agents/tester/jest.config.ts"
+      }
+    },
+    "cjs": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "agents/tester/src/index.ts",
+        "outputPath": "dist/agents/tester",
+        "tsConfig": "agents/tester/tsconfig.lib.json",
+        "compiler": "swc",
+        "project": "agents/tester/package.json",
+        "format": ["esm"],
+        "assets": [
+          {
+            "glob": "agents/tester/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "agents/tester/src/index.ts",
+        "outputPath": "dist/agents/tester",
+        "tsConfig": "agents/tester/tsconfig.es.json",
+        "compiler": "swc",
+        "project": "agents/tester/package.json",
+        "format": ["esm", "cjs"],
+        "assets": [
+          {
+            "glob": "agents/tester/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "clean": false
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
       }
     }
   },

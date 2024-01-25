@@ -1,7 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
+  "lib": ["es2020", "dom", "DOM.Iterable", "esnext", "ESNext.AsyncIterable"  ],
+ 
   "compilerOptions": {
-     "allowJs": true
+     "allowJs": true,
+     "allowSyntheticDefaultImports": true
+
+   
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ],
+  "ts-node": {
+    "swc": true
   },
   "files": [],
   "include": [],

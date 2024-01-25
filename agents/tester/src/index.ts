@@ -1,4 +1,4 @@
-import {WebChatMachine} from './lib/machines/chat';
+import {WebChatMachine, createWebChatService} from './lib/machines/chat';
 
 export * from './lib/tester';
  
