@@ -170,10 +170,10 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-
+store/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
-
+temp/
 # TypeScript cache
 *.tsbuildinfo
 

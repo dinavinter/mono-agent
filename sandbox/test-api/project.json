@@ -1,0 +1,44 @@
+{
+  "name": "test-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "sandbox/test-api/src",
+  "targets": {
+    "build": {
+      "executor": "@nx-bun/nx:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "entrypoints": ["sandbox/test-api/src/main.ts"],
+        "outputPath": "dist/test-api",
+        "tsConfig": "sandbox/test-api/tsconfig.app.json",
+        "smol": false,
+        "bun": true
+      }
+    },
+    "serve": {
+      "executor": "@nx-bun/nx:run",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "test-api:build",
+        "tsConfig": "sandbox/test-api/tsconfig.app.json",
+        "watch": true,
+        "hot": true,
+        "bun": true,
+        "smol": false
+      }
+    },
+    "test": {
+      "executor": "@nx-bun/nx:test",
+      "options": {
+        "smol": false,
+        "bail": true,
+        "tsConfig": "sandbox/test-api/tsconfig.json",
+        "bun": true
+      }
+    },
+    "ls": {
+       "command": "bun pm ls --all"
+      
+    }
+  }
+}

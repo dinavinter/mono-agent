@@ -1,0 +1,37 @@
+{
+  "name": "agent",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "swc": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/tools/agent",
+        "main": "tools/agent/src/index.ts",
+        "tsConfig": "tools/agent/tsconfig.json",
+        "assets": []
+      }
+    },
+    "ee": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "tsup",
+        "cwd": "$workspaceRoot"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm exec tsup tools/agent/src/index.ts --format cjs,esm --dts --outDir dist/tools/agent"
+        ]
+      }
+    },
+    "aitester": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["ts-node dist/tools/agent/examples/helpers/run.js tester"]
+      }
+    }
+  }
+}
