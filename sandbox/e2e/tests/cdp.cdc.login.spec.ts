@@ -13,8 +13,6 @@ const authFile=
 
 test.use({
   baseURL: 'https://pyzlocdp.my.universe.cdp.gigya.com/',
-  headless: false,
-  video: 'on-first-retry',
   storageState: 'playwright/.auth/cdc.json',
   testIdAttribute: 'cdc-login',
 })

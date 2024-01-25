@@ -15,8 +15,8 @@
     "ui": "playwright test --browser=chromium --ui --slow-mo=1000",
     "test-html-report": "playwright test --browser=all --reporter=html",
     "docker:trusted": "docker run -it --rm --ipc=host -p 9090:8080 e2e  /bin/bash",
-    "test-json-report": "PLAYWRIGHT_JSON_OUTPUT_NAME=results.json playwright test --browser=chromium --reporter=json"
-
+    "test-json-report": "PLAYWRIGHT_JSON_OUTPUT_NAME=results.json playwright test --browser=chromium --reporter=json",
+    "open-report": "playwright show-report"
   },
   "keywords": [],
   "author": "",
