@@ -1,1 +1,1 @@
-export * from './lib/sendbox';
+export * from './lib';

@@ -1,17 +1,17 @@
 {
   "name": "ai-dev",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/sendbox/src",
+  "sourceRoot": "libs/sandbox/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/js:swc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/sendbox",
-        "main": "libs/sendbox/src/index.ts",
-        "tsConfig": "libs/sendbox/tsconfig.lib.json",
-        "assets": ["libs/sendbox/*.md"]
+        "outputPath": "dist/libs/sandbox",
+        "main": "libs/sandbox/src/index.ts",
+        "tsConfig": "libs/sandbox/tsconfig.lib.json",
+        "assets": ["libs/sandbox/*.md"]
       }
     },
     "lint": {
@@ -19,8 +19,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/sendbox/**/*.ts",
-          "libs/sendbox/package.json"
+          "libs/sandbox/**/*.ts",
+          "libs/sandbox/package.json"
         ]
       }
     },
@@ -29,7 +29,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/libs/sendbox"
+        "reportsDirectory": "../../coverage/libs/sandbox"
       }
     }
   },

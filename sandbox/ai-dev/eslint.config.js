@@ -10,24 +10,24 @@ export default [
   ...baseConfig,
   {
     files: [
-      'libs/sendbox/**/*.ts',
-      'libs/sendbox/**/*.tsx',
-      'libs/sendbox/**/*.js',
-      'libs/sendbox/**/*.jsx',
+      'libs/sandbox/**/*.ts',
+      'libs/sandbox/**/*.tsx',
+      'libs/sandbox/**/*.js',
+      'libs/sandbox/**/*.jsx',
     ],
     rules: {},
   },
   {
-    files: ['libs/sendbox/**/*.ts', 'libs/sendbox/**/*.tsx'],
+    files: ['libs/sandbox/**/*.ts', 'libs/sandbox/**/*.tsx'],
     rules: {},
   },
   {
-    files: ['libs/sendbox/**/*.js', 'libs/sendbox/**/*.jsx'],
+    files: ['libs/sandbox/**/*.js', 'libs/sandbox/**/*.jsx'],
     rules: {},
   },
   ...compat.config({ parser: 'jsonc-eslint-parser' }).map((config) => ({
     ...config,
-    files: ['libs/sendbox/**/*.json'],
+    files: ['libs/sandbox/**/*.json'],
     rules: {
       '@nx/dependency-checks': [
         'error',
