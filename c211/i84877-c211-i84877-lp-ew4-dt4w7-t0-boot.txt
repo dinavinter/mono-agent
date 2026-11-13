@@ -1,0 +1,10 @@
+C211_I84877_BOOT_PROOF exec=c211-i84877-lp-ew4-dt4w7 idx=0 host=localhost utc=2026-11-13T07:53:22Z
+---NVSMI_L---
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-634d5526-6058-28a7-cb20-69a849dcac34)
+---NVSMI_CSV---
+GPU-634d5526-6058-28a7-cb20-69a849dcac34, NVIDIA RTX PRO 6000 Blackwell Server Edition, 580.126.20, 97887 MiB, 12.0
+---OS---
+PRETTY_NAME="Ubuntu 22.04.4 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+6.9.12
