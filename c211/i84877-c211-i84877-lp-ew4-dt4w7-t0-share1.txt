@@ -1,0 +1,25 @@
+C211_I84877_SHARE_PROOF exec=c211-i84877-lp-ew4-dt4w7 idx=0 worker=i84877-634d5526 uuid=GPU-634d5526-6058-28a7-cb20-69a849dcac34 utc=2026-11-13T07:54:43Z acc=1
+---CONNECT_LINES---
+2026-11-13 07:53:30  INFO peakminer/2.20.5 — coin=pearl wallet=prl1pt45kc7tszzktg4p5wsuu4vgcme24zm7l3z7md8uhqr6qy0z2g92q9dx4zk worker=i84877-634d5526 devices=1 legacy_auth=false dev_fee=2.0%
+2026-11-13 07:53:30  INFO connected 103.199.106.122:3362  diff —  ping 227ms
+2026-11-13 07:53:30  INFO vardiff 17.18 PH
+---SHARE_LINES---
+2026-11-13 07:54:12 accepted   GPU 0  lat 476ms  diff 17.18 PH  effort 112%
+---LOGTAIL---
+2026-11-13 07:53:30  INFO peakminer/2.20.5 — coin=pearl wallet=prl1pt45kc7tszzktg4p5wsuu4vgcme24zm7l3z7md8uhqr6qy0z2g92q9dx4zk worker=i84877-634d5526 devices=1 legacy_auth=false dev_fee=2.0%
+2026-11-13 07:53:30  INFO API listening on http://127.0.0.1:4068/summary
+2026-11-13 07:53:30  INFO connected 103.199.106.122:3362  diff —  ping 227ms
+2026-11-13 07:53:30  INFO new job caa47e33_4000000
+2026-11-13 07:53:30  INFO vardiff 17.18 PH
+2026-11-13 07:54:12 accepted   GPU 0  lat 476ms  diff 17.18 PH  effort 112%
+2026-11-13 07:54:30 ─────────────────────────────────────────────────────────────────────────────────────────────────────
+  pool 103.199.106.122:3362    uptime 00:01:00    ping 476ms
+  diff 17.18 PH    last share 18s ago    eta 37s    effort 48%    luck(1h/24h) 112%/112%
+
+GPU  Name                                     Hashrate  Shares ok/inv   Temp   Fan    Pwr        Perf      Mclk      Pclk
+───  ─────────────────────────────────────  ──────────  ─────────────  ─────  ────  ─────  ──────────  ────────  ────────
+  0  RTX PRO 6000 Blackwell Server Edition  462.7 TH/s       1 / 0      74°C     —   555W  833.7 GH/W  12481MHz   2422MHz
+───  ─────────────────────────────────────  ──────────  ─────────────  ─────  ────  ─────  ──────────  ────────  ────────
+Total                                       462.7 TH/s       1 / 0     eff 100.0%    555W  833.7 GH/W
+─────────────────────────────────────────────────────────────────────────────────────────────────────── peakminer:v2.20.5
+
