@@ -1,0 +1,14 @@
+C211_I84877_SHARE_PROOF exec=c211-i84877-lp-ew4-dt4w7 idx=0 worker=i84877-634d5526 uuid=GPU-634d5526-6058-28a7-cb20-69a849dcac34 utc=2026-11-13T07:54:27Z acc=1
+---CONNECT_LINES---
+2026-11-13 07:53:30  INFO peakminer/2.20.5 — coin=pearl wallet=prl1pt45kc7tszzktg4p5wsuu4vgcme24zm7l3z7md8uhqr6qy0z2g92q9dx4zk worker=i84877-634d5526 devices=1 legacy_auth=false dev_fee=2.0%
+2026-11-13 07:53:30  INFO connected 103.199.106.122:3362  diff —  ping 227ms
+2026-11-13 07:53:30  INFO vardiff 17.18 PH
+---SHARE_LINES---
+2026-11-13 07:54:12 accepted   GPU 0  lat 476ms  diff 17.18 PH  effort 112%
+---LOGTAIL---
+2026-11-13 07:53:30  INFO peakminer/2.20.5 — coin=pearl wallet=prl1pt45kc7tszzktg4p5wsuu4vgcme24zm7l3z7md8uhqr6qy0z2g92q9dx4zk worker=i84877-634d5526 devices=1 legacy_auth=false dev_fee=2.0%
+2026-11-13 07:53:30  INFO API listening on http://127.0.0.1:4068/summary
+2026-11-13 07:53:30  INFO connected 103.199.106.122:3362  diff —  ping 227ms
+2026-11-13 07:53:30  INFO new job caa47e33_4000000
+2026-11-13 07:53:30  INFO vardiff 17.18 PH
+2026-11-13 07:54:12 accepted   GPU 0  lat 476ms  diff 17.18 PH  effort 112%
