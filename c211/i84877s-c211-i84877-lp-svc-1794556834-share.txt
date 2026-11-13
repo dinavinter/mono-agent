@@ -1,0 +1,17 @@
+C211_I84877S_SHARE_PROOF worker=i84877s-418a391c uuid=GPU-418a391c-5406-b9f6-7db7-7a5f5abb0b7f utc=2026-11-13T08:02:01Z acc=1
+---CONNECT---
+2026-11-13 08:01:04  INFO peakminer/2.20.5 — coin=pearl wallet=prl1pt45kc7tszzktg4p5wsuu4vgcme24zm7l3z7md8uhqr6qy0z2g92q9dx4zk worker=i84877s-418a391c devices=1 legacy_auth=false dev_fee=2.0%
+2026-11-13 08:01:04  INFO connected 103.199.106.122:3362  diff —  ping 176ms
+2026-11-13 08:01:04  INFO vardiff 17.18 PH
+---SHARES---
+2026-11-13 08:01:47 accepted   GPU 0  lat 374ms  diff 17.18 PH  effort 113%
+---TAIL---
+2026-11-13 08:01:04  INFO peakminer/2.20.5 — coin=pearl wallet=prl1pt45kc7tszzktg4p5wsuu4vgcme24zm7l3z7md8uhqr6qy0z2g92q9dx4zk worker=i84877s-418a391c devices=1 legacy_auth=false dev_fee=2.0%
+2026-11-13 08:01:04  INFO API listening on http://127.0.0.1:4068/summary
+2026-11-13 08:01:04  INFO connected 103.199.106.122:3362  diff —  ping 176ms
+2026-11-13 08:01:04  INFO new job 45703c2b_4000000
+2026-11-13 08:01:04  INFO vardiff 17.18 PH
+2026-11-13 08:01:10  INFO new job 73d5ee38_4000000
+2026-11-13 08:01:47 accepted   GPU 0  lat 374ms  diff 17.18 PH  effort 113%
+2026-11-13 08:01:47  INFO new job 4f5bd722_4000000
+2026-11-13 08:01:51  INFO new job f30f98a3_4000000
