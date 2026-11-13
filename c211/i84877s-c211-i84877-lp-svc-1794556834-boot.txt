@@ -1,0 +1,5 @@
+C211_I84877S_BOOT_PROOF host=localhost rev=c211-i84877-lp-svc-00001-ctm utc=2026-11-13T08:00:51Z
+---NVSMI_L---
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-418a391c-5406-b9f6-7db7-7a5f5abb0b7f)
+---NVSMI_CSV---
+GPU-418a391c-5406-b9f6-7db7-7a5f5abb0b7f, NVIDIA RTX PRO 6000 Blackwell Server Edition, 580.126.20, 97887 MiB
